@@ -1,34 +1,19 @@
 <template>
-  <transition name="fade-loading">
-    <div v-if="!backendListo" class="loading-screen-rpg">
-      <div class="loader-content animate-float">
-        <div class="spinner-epic animate-spin-glow"></div>
-        <h2 class="loading-title">Cargando Pomodoro War</h2>
-        <p class="loading-msg">{{ mensajeCarga }}</p>
-        <div class="loading-bar-container">
-          <div class="loading-bar-fill"></div>
-        </div>
-      </div>
-    </div>
-  </transition>
-
-  <div v-if="backendListo">
-    <CustomAlert
-      :show="alertState.show"
-      :title="alertState.title"
-      :message="alertState.message"
-      :type="alertState.type"
-      @close="closeAlert"
-    />
-    <CustomConfirm
-      :show="confirmState.show"
-      :title="confirmState.title"
-      :message="confirmState.message"
-      @confirm="confirmAction"
-      @cancel="cancelAction"
-    />
-    <router-view> </router-view>
-  </div>
+  <CustomAlert
+    :show="alertState.show"
+    :title="alertState.title"
+    :message="alertState.message"
+    :type="alertState.type"
+    @close="closeAlert"
+  />
+  <CustomConfirm
+    :show="confirmState.show"
+    :title="confirmState.title"
+    :message="confirmState.message"
+    @confirm="confirmAction"
+    @cancel="cancelAction"
+  />
+  <router-view> </router-view>
 </template>
 
 <script setup>
@@ -37,6 +22,7 @@ import CustomAlert from './components/CustomAlert.vue'
 import CustomConfirm from './components/CustomConfirm.vue'
 import { useDialog } from './composables/useDialog'
 
+// Usar el composable
 const { alertState, confirmState, closeAlert, confirmAction, cancelAction } = useDialog()
 </script>
 
