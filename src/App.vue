@@ -27,6 +27,23 @@ const { alertState, confirmState, closeAlert, confirmAction, cancelAction } = us
 </script>
 
 <style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  /* FONDO DE PANTALLA POR DEFECTO PARA MENÚS Y COMPONENTES */
+  background-color: var(--bg-main);
+  background-image:
+    linear-gradient(rgba(26, 13, 46, 0.82), rgba(26, 13, 46, 0.88)), url('/world/default.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--text-main);
+  transition: background 0.3s ease;
+  min-height: 100vh;
+}
 /* ============================================
    VARIABLES CSS - TEMA RPG ÉPICO
    ============================================ */
