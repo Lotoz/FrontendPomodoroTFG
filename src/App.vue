@@ -34,57 +34,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { RouterView } from 'vue-router'
-import api from './api/axios' // Tu instancia de Axios configurada
+import api from './api/axios'
 import CustomAlert from './components/CustomAlert.vue'
 import CustomConfirm from './components/CustomConfirm.vue'
 import { useDialog } from './composables/useDialog'
 
 const { alertState, confirmState, closeAlert, confirmAction, cancelAction } = useDialog()
-
-const backendListo = ref(false)
-const mensajeCarga = ref('Encendiendo las antorchas de la fortaleza...')
-
-const frasesRpg = [
-  'Invocando mercenarios a la Taberna...',
-  'Preparando el hidromiel en el Cuervo Sediento...',
-  'Afilando las espadas de tus caballeros...',
-  'Sincronizando los relojes de arena del Pomodoro...',
-  'Desplegando patrullas de reconocimiento en la Zona Inicial...',
-  'Despertando al Bardo de su siesta...',
-  'Alimentando a los orcos de la primera etapa...',
-  'Limpiando las lápidas del Cementerio...',
-]
-
-const comprobarConexionBackend = async () => {
-  let conectado = false
-
-  // Rotador de frases inmersivas cada 2 segundos
-  const intervaloFrases = setInterval(() => {
-    mensajeCarga.value = frasesRpg[Math.floor(Math.random() * frasesRpg.length)]
-  }, 2000)
-
-  // Bucle de sondeo: Intenta conectar con el backend
-  while (!conectado) {
-    try {
-      // Usa auth/health que no requiere token, o intenta login con credenciales vacías
-      // Si el backend responde de cualquier forma, significa que está activo
-      await api.get('/auth/health').catch(() => {
-        // Si no existe /auth/health, intenta con una ruta pública
-        return api.post('/auth/login', { username: 'test', password: 'test' }).catch(() => {
-          // Si falla, lanza error para reintentar
-          throw new Error('Backend no disponible')
-        })
-      })
-      conectado = true
-    } catch (error) {
-      // Espera 1 segundo antes del siguiente reintento si la conexión es rechazada temporalmente
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-    }
-  }
-
-  clearInterval(intervaloFrases)
-  backendListo.value = true
-}
 
 onMounted(() => {
   comprobarConexionBackend()
