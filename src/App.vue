@@ -32,18 +32,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
 import { RouterView } from 'vue-router'
-import api from './api/axios'
 import CustomAlert from './components/CustomAlert.vue'
 import CustomConfirm from './components/CustomConfirm.vue'
 import { useDialog } from './composables/useDialog'
 
 const { alertState, confirmState, closeAlert, confirmAction, cancelAction } = useDialog()
-
-onMounted(() => {
-  comprobarConexionBackend()
-})
 </script>
 
 <style>
