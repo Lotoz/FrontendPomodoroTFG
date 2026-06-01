@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL
+// Añadimos la URL de tu backend como respaldo por si la variable de Vercel falla
+const API_URL = import.meta.env.VITE_API_URL || 'https://backendpomodorotfg.onrender.com/api'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -19,7 +20,8 @@ export const useAuthStore = defineStore('auth', {
         async login(username, password) {
             this.error = null;
             try {
-                const response = await axios.post(`${API_URL}/login`, { username, password });
+                // Ajustado a /auth/login asumiendo que esa es la ruta en tu backend
+                const response = await axios.post(`${API_URL}/auth/login`, { username, password });
                 this.token = response.data.token;
                 this.masterName = response.data.masterName || 'lotoz';
 
@@ -37,7 +39,8 @@ export const useAuthStore = defineStore('auth', {
         async register(username, email, password, masterName) {
             this.error = null;
             try {
-                const response = await axios.post(`${API_URL}/register`, { username, email, password, masterName });
+                // Ajustado a /auth/register
+                const response = await axios.post(`${API_URL}/auth/register`, { username, email, password, masterName });
                 this.token = response.data.token;
                 this.masterName = response.data.masterName;
 
