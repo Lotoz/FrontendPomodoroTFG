@@ -299,7 +299,7 @@ onMounted(() => {
 
 <style scoped>
 .page-shell {
-  background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-secondary) 100%);
+  background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-secondary) 30%);
   min-height: 100vh;
   font-family: sans-serif;
   padding: 20px;
