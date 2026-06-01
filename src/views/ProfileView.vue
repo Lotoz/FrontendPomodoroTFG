@@ -161,7 +161,7 @@ onMounted(() => {
                 :class="{ selected: profileData.masterName === 'blody' }"
                 @click="profileData.masterName = 'blody'"
               >
-                <span class="emoji"><img src="/iconsApp/beer.png" alt="Blody" /></span
+                <span class="emoji"><img src="/iconsApp/bloody.png" alt="Blody" /></span
                 ><span class="name">Blody</span>
               </div>
               <div
