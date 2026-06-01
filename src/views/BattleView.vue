@@ -28,7 +28,7 @@
       </div>
 
       <div v-else-if="estadoCombate === 'DEFEAT'" class="end-screen defeat">
-        <h1><img src="/iconsApp/lose.png" alt="Derrota" /> Aniquilación...</h1>
+        <h1><img src="/iconsApp/lose.png" alt="Derrota" class="end-icon" /> Aniquilación...</h1>
         <p>Tus héroes han caído. La oscuridad avanza.</p>
         <button @click="cerrarVentana" class="btn-rpg primary">Huir a la Fortaleza</button>
       </div>
@@ -719,15 +719,12 @@ onMounted(() => {
   line-height: 20px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
 }
-.hud-badges .badge {
-  background: linear-gradient(135deg, rgba(61, 37, 99, 0.8) 0%, rgba(45, 27, 78, 0.8) 100%);
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  color: #f0e6ff;
-  margin-right: 6px;
-  border: 1px solid #d99fff;
-  box-shadow: 0 0 8px rgba(179, 102, 255, 0.3);
+.hud-badges .badge img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 4px;
 }
 .hud-badges .badge.stun {
   border-color: #ffaa00;
@@ -1521,5 +1518,38 @@ onMounted(() => {
     font-size: 0.75rem;
     margin: 6px;
   }
+}
+
+/* Estilos para iconos */
+.end-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+.hud-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  vertical-align: middle;
+  filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.4));
+}
+
+.mini-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.menu-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-right: 6px;
+  vertical-align: middle;
 }
 </style>

@@ -297,10 +297,18 @@ onUnmounted(() => {
 
 /* Icono */
 .alert-icon {
-  font-size: 3.5rem;
   margin-bottom: 15px;
   animation: icon-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.alert-icon img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(179, 102, 255, 0.6));
 }
 
 @keyframes icon-bounce {

@@ -377,6 +377,16 @@ onMounted(() => {
   text-transform: uppercase;
   font-size: 0.9rem;
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-nav img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .btn-nav:hover {

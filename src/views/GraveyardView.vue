@@ -34,7 +34,12 @@
           </button>
 
           <div class="modal-header">
-            <span class="emoji-class"><img :src="obtenerIconoClase(heroeSeleccionado.heroClass)" alt="Clase" class="modal-class-icon" /></span>
+            <span class="emoji-class"
+              ><img
+                :src="obtenerIconoClase(heroeSeleccionado.heroClass)"
+                alt="Clase"
+                class="modal-class-icon"
+            /></span>
             <h2>{{ heroeSeleccionado.name }}</h2>
             <span class="level-badge">Nivel {{ heroeSeleccionado.level }}</span>
           </div>
@@ -137,6 +142,16 @@ onMounted(() => {
   color: #94a3b8; /* Gris azulado */
   font-size: 2.5rem;
   margin: 0 0 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-section h1 img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .subtitle {
@@ -218,10 +233,16 @@ onMounted(() => {
 }
 
 .tomb-cross {
-  font-size: 2.5rem;
-  color: #1e293b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 15px;
-  text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.2);
+}
+
+.tomb-cross img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }
 
 .tomb-name {
@@ -276,9 +297,19 @@ onMounted(() => {
   background: transparent;
   border: none;
   color: #94a3b8;
-  font-size: 1.5rem;
   cursor: pointer;
   transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.btn-close img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .btn-close:hover {

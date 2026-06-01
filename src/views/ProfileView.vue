@@ -626,10 +626,18 @@ onMounted(() => {
   transform: scale(1.05);
 }
 .master-card .emoji {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 50px;
   height: 50px;
-  object-fit: contain;
   margin-bottom: 5px;
+}
+
+.master-card .emoji img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .master-card .name {
   font-weight: bold;

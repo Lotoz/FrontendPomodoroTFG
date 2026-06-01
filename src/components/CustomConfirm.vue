@@ -221,10 +221,18 @@ onUnmounted(() => {
 
 /* Icono */
 .confirm-icon {
-  font-size: 3.5rem;
   margin-bottom: 15px;
   animation: icon-shake 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-icon img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.6));
 }
 
 @keyframes icon-shake {
@@ -279,6 +287,17 @@ onUnmounted(() => {
   flex: 1;
   min-width: 150px;
   font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-cancel img,
+.btn-confirm img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 /* Transiciones */
@@ -307,8 +326,12 @@ onUnmounted(() => {
   }
 
   .confirm-icon {
-    font-size: 2.5rem;
     margin-bottom: 12px;
+  }
+
+  .confirm-icon img {
+    width: 40px;
+    height: 40px;
   }
 
   .confirm-title {
@@ -339,8 +362,12 @@ onUnmounted(() => {
   }
 
   .confirm-icon {
-    font-size: 2rem;
     margin-bottom: 10px;
+  }
+
+  .confirm-icon img {
+    width: 32px;
+    height: 32px;
   }
 
   .confirm-title {

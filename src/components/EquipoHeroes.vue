@@ -96,6 +96,16 @@ const calcularPorcentajeVida = (vidaActual, vidaMax) => {
   text-shadow:
     0 0 10px rgba(179, 102, 255, 0.3),
     1px 1px 2px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-equipo h3 img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .badge-count {
@@ -181,6 +191,16 @@ const calcularPorcentajeVida = (vidaActual, vidaMax) => {
   color: var(--text-main);
   font-size: 0.95rem;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-stats p img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* Barra de Vida */
@@ -193,6 +213,16 @@ const calcularPorcentajeVida = (vidaActual, vidaMax) => {
   color: var(--text-secondary, #c9b8ff);
   margin-bottom: 6px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.life-text img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .life-bar-bg {
@@ -247,6 +277,15 @@ const calcularPorcentajeVida = (vidaActual, vidaMax) => {
   border: 1px solid;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.effect-badge img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
 }
 
 .effect-badge:hover {

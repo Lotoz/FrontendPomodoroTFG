@@ -53,7 +53,8 @@ onMounted(() => {
     <div class="bestiary-container">
       <header class="header-top">
         <h1>
-          <img src="/iconsApp/bestiario.png" alt="Bestiario" class="h1-icon" /> Gran Bestiario del Reino
+          <img src="/iconsApp/bestiario.png" alt="Bestiario" class="h1-icon" /> Gran Bestiario del
+          Reino
         </h1>
         <button @click="router.push('/dashboard')" class="btn-back">Volver al Tablón</button>
       </header>
@@ -101,18 +102,13 @@ onMounted(() => {
                     :src="entradaActual.photo"
                     :alt="entradaActual.name"
                   />
-                  <span v-else class="emoji-placeholder">
+                  <span class="emoji-placeholder">
                     <img
                       v-if="entradaActual.team === 'hero'"
                       src="/iconsApp/sword.png"
                       alt="Héroe"
                     />
-                    <span v-else
-                      ><img
-                        src="/iconsApp/beast.png"
-                        alt="Bestia"
-                        style="width: 64px; height: 64px; object-fit: contain"
-                    /></span>
+                    <img v-else src="/iconsApp/beast.png" alt="Bestia" />
                   </span>
                 </div>
                 <div class="character-identity">
@@ -363,10 +359,19 @@ onMounted(() => {
 }
 
 .emoji-placeholder {
-  font-size: 8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   animation: floatCharacter 4s ease-in-out infinite;
 }
 
+.emoji-placeholder img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
 .character-identity {
   text-align: center;
 }

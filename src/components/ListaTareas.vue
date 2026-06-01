@@ -115,6 +115,16 @@ const guardarEdicion = (tareaId) => {
     0 0 10px rgba(179, 102, 255, 0.3),
     1px 1px 2px rgba(0, 0, 0, 0.6);
   letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel h3 img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .add-task-form {
@@ -267,6 +277,17 @@ const guardarEdicion = (tareaId) => {
   transition: all 0.2s ease;
   padding: 4px 8px;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tarea-actions button img,
+.edit-actions button img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .tarea-actions button:hover,

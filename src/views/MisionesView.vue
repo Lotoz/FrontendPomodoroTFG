@@ -116,7 +116,9 @@ onMounted(cargarDatos)
       <div class="tareas-view-container">
         <header class="tareas-header">
           <div class="header-top">
-            <h1><img src="/iconsApp/scroll.png" alt="Misiones" class="h1-icon" /> Tablón de Misiones</h1>
+            <h1>
+              <img src="/iconsApp/scroll.png" alt="Misiones" class="h1-icon" /> Tablón de Misiones
+            </h1>
             <button @click="router.push('/dashboard')" class="btn-back">
               Volver al Tablón Principal
             </button>
@@ -193,13 +195,11 @@ onMounted(cargarDatos)
                   <button @click="iniciarEdicion(tarea)" class="btn-action-edit" title="Editar">
                     <img src="/iconsApp/IconoEdit.png" alt="Editar" />
                   </button>
-                  <button
-                    @click="eliminarTarea(tarea.id)"
-                    class="btn-action-delete"
-                    title="Eliminar"
-                  >
-                    <img src="/iconsApp/IconoBorrar.png" alt="Eliminar" />
-                  </button>
+                  <form @submit.prevent="eliminarTarea(tarea.id)" class="form-delete-mission">
+                    <button type="submit" class="btn-action-delete" title="Eliminar">
+                      <img src="/iconsApp/IconoBorrar.png" alt="Eliminar" />
+                    </button>
+                  </form>
                 </div>
               </template>
 
@@ -434,10 +434,19 @@ onMounted(cargarDatos)
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 1.4rem;
   padding: 8px;
   border-radius: 8px;
   transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-action-edit img,
+.btn-action-delete img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 .btn-action-edit:hover,
 .btn-action-delete:hover {
@@ -470,6 +479,16 @@ onMounted(cargarDatos)
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-save-expanded img,
+.btn-cancel-expanded img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
 }
 .btn-save-expanded {
   background: #10b981;
@@ -536,6 +555,11 @@ onMounted(cargarDatos)
     padding: 8px 12px;
   }
 
+  .form-delete-mission {
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+  }
   .tarea-item-expanded {
     flex-direction: column;
     align-items: flex-start;

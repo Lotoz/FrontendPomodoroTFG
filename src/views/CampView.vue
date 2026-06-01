@@ -3,7 +3,9 @@
     <div class="camp-container">
       <header class="header-top">
         <div class="title-section">
-          <h1><img src="/iconsApp/camp.png" alt="Campamento" class="h1-icon" /> Campamento de Héroes</h1>
+          <h1>
+            <img src="/iconsApp/camp.png" alt="Campamento" class="h1-icon" /> Campamento de Héroes
+          </h1>
           <p class="subtitle">
             Gestiona a tus mercenarios. Solo los que estén en el "Equipo Activo" lucharán en la Zona
             de Batalla.
@@ -17,7 +19,7 @@
       <div v-else class="roster-grid">
         <section class="team-section active-team">
           <div class="section-header">
-            <h2><img src="/iconsApp/sword.png" alt="Batalla" /> Equipo Activo</h2>
+            <h2><img src="/iconsApp/sword.png" alt="Batalla" class="h2-icon" /> Equipo Activo</h2>
             <span class="badge">{{ activos.length }} en formación</span>
           </div>
 
@@ -44,7 +46,9 @@
                   <img src="/iconsApp/star.png" alt="Vida" /> Vida: {{ heroe.life }} /
                   {{ heroe.lifeMax }}
                 </p>
-                <p><img src="/iconsApp/iconoEquipo.png" alt="Armadura" /> Armadura: {{ heroe.armor }}</p>
+                <p>
+                  <img src="/iconsApp/iconoEquipo.png" alt="Armadura" /> Armadura: {{ heroe.armor }}
+                </p>
               </div>
               <button @click="toggleStatus(heroe.id)" class="btn-action remove">
                 Mandar al Banquillo
@@ -55,7 +59,10 @@
 
         <section class="team-section benched-team">
           <div class="section-header">
-            <h2><img src="/iconsApp/rest.png" alt="Banquillo" class="h2-icon" /> Banquillo (Descansando)</h2>
+            <h2>
+              <img src="/iconsApp/rest.png" alt="Banquillo" class="h2-icon" /> Banquillo
+              (Descansando)
+            </h2>
             <span class="badge">{{ inactivos.length }} descansando</span>
           </div>
 
@@ -82,7 +89,9 @@
                   <img src="/iconsApp/star.png" alt="Vida" /> Vida: {{ heroe.life }} /
                   {{ heroe.lifeMax }}
                 </p>
-                <p><img src="/iconsApp/iconoEquipo.png" alt="Armadura" /> Armadura: {{ heroe.armor }}</p>
+                <p>
+                  <img src="/iconsApp/iconoEquipo.png" alt="Armadura" /> Armadura: {{ heroe.armor }}
+                </p>
               </div>
               <button @click="toggleStatus(heroe.id)" class="btn-action add">
                 Añadir al Equipo
@@ -185,7 +194,8 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
 }
-.h1-icon, .h2-icon {
+.h1-icon,
+.h2-icon {
   width: 28px;
   height: 28px;
   object-fit: contain;
@@ -323,6 +333,16 @@ onMounted(() => {
   margin: 5px 0;
   color: var(--text-main);
   font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-stats p img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .btn-action {
