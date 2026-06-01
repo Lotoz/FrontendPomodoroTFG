@@ -258,6 +258,7 @@ const registrarEntrenamiento = async () => {
 }
 
 const abrirBatalla = () => {
+  // Si no hay equipo, mostramos alerta y no dejamos avanzar
   if (!equipo.value || equipo.value.length === 0) {
     showAlert(
       'Tu equipo activo está vacío. ¡Ve al Campamento y prepara a tus héroes antes de luchar!',
@@ -266,18 +267,9 @@ const abrirBatalla = () => {
     )
     return
   }
-  const routeData = router.resolve({ path: '/battle' })
-  const ventanaBatalla = window.open(
-    routeData.href,
-    '_blank',
-    'width=1280,height=800,menubar=no,toolbar=no,location=no,status=no',
-  )
-  const monitorVentana = setInterval(() => {
-    if (!ventanaBatalla || ventanaBatalla.closed) {
-      clearInterval(monitorVentana)
-      cargarDatos()
-    }
-  }, 500)
+
+  // Navegación directa en la misma pestaña usando Vue Router
+  router.push('/battle')
 }
 
 const logout = () => {

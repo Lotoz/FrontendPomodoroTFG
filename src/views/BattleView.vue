@@ -273,7 +273,7 @@ const porcentaje = (actual, max) => {
 }
 
 const cerrarVentana = () => {
-  window.close()
+  // Navegamos de vuelta a la fortaleza
   router.push('/dashboard')
 }
 
