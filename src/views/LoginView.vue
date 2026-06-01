@@ -1,20 +1,29 @@
 <template>
   <div class="login-container">
-    <div class="login-card" :class="{ 'card-wide': isRegistering }">
-      <h2>{{ isRegistering ? 'Forja tu Alianza' : 'Entrar a la Fortaleza' }}</h2>
+    <div class="login-card" :class="{ 'card-wide': currentMode === 'register' }">
+      <h2>{{ getTitle }}</h2>
 
       <form @submit.prevent="handleSubmit">
-        <div class="form-group">
-          <label>Nombre de Comandante</label>
-          <input v-model="form.username" type="text" required />
-        </div>
+        <template v-if="currentMode === 'login'">
+          <div class="form-group">
+            <label>Nombre de Comandante</label>
+            <input v-model="form.username" type="text" required />
+          </div>
+          <div class="form-group">
+            <label>Contraseña Mágica</label>
+            <input v-model="form.password" type="password" required />
+          </div>
+        </template>
 
-        <template v-if="isRegistering">
+        <template v-else-if="currentMode === 'register'">
+          <div class="form-group">
+            <label>Nombre de Comandante</label>
+            <input v-model="form.username" type="text" required />
+          </div>
           <div class="form-group">
             <label>Email Cifrado</label>
             <input v-model="form.email" type="email" required />
           </div>
-
           <div class="form-group">
             <label>Elige a tu Maestro</label>
             <div class="master-grid">
@@ -52,72 +61,144 @@
               </div>
             </div>
           </div>
+          <div class="form-group">
+            <label>Contraseña Mágica</label>
+            <input v-model="form.password" type="password" required />
+          </div>
         </template>
 
-        <div class="form-group">
-          <label>Contraseña Mágica</label>
-          <input v-model="form.password" type="password" required />
-        </div>
+        <template v-else-if="currentMode === 'forgot'">
+          <p class="instruction-text">
+            Introduce tu correo para recibir un pergamino de recuperación.
+          </p>
+          <div class="form-group">
+            <label>Email Cifrado</label>
+            <input v-model="form.email" type="email" required />
+          </div>
+        </template>
+
+        <template v-else-if="currentMode === 'reset'">
+          <p class="instruction-text">Introduce el código de 6 dígitos enviado a tu correo.</p>
+          <div class="form-group">
+            <label>Código de Recuperación</label>
+            <input v-model="form.code" type="text" placeholder="Ej: 123456" required />
+          </div>
+          <div class="form-group">
+            <label>Nueva Contraseña Mágica</label>
+            <input v-model="form.password" type="password" required />
+          </div>
+        </template>
 
         <div v-if="authStore.error" class="error-msg">
           {{ authStore.error }}
         </div>
 
-        <button type="submit" class="btn-primary">
-          {{ isRegistering ? 'Reclamar Maestro' : 'Desplegar Tropas' }}
+        <button type="submit" class="btn-primary" :disabled="loading">
+          {{ getButtonText }}
         </button>
       </form>
 
-      <button @click="toggleMode" class="btn-text">
-        {{ isRegistering ? '¿Ya tienes alianza? Inicia sesión' : '¿Buscas maestro? Regístrate' }}
-      </button>
+      <div class="nav-links">
+        <button
+          v-if="currentMode === 'login'"
+          @click="setMode('forgot')"
+          class="btn-text warning-text"
+        >
+          ¿Olvidaste tu contraseña?
+        </button>
+        <button v-if="currentMode === 'login'" @click="setMode('register')" class="btn-text">
+          ¿Buscas maestro? Regístrate
+        </button>
+        <button v-if="currentMode !== 'login'" @click="setMode('login')" class="btn-text">
+          Volver a la entrada de la Fortaleza
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
+import { useDialog } from '../composables/useDialog'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const { showAlert } = useDialog()
 
-const isRegistering = ref(false)
+// Modos posibles: 'login', 'register', 'forgot', 'reset'
+const currentMode = ref('login')
+const loading = ref(false)
+
 const form = reactive({
   username: '',
   email: '',
   password: '',
-  masterName: 'lotoz', // Maestro por defecto
+  code: '',
+  masterName: 'lotoz',
 })
 
-const toggleMode = () => {
-  isRegistering.value = !isRegistering.value
+const getTitle = computed(() => {
+  if (currentMode.value === 'register') return 'Forja tu Alianza'
+  if (currentMode.value === 'forgot') return 'Recuperar Llave'
+  if (currentMode.value === 'reset') return 'Forjar Nueva Llave'
+  return 'Entrar a la Fortaleza'
+})
+
+const getButtonText = computed(() => {
+  if (loading.value) return 'Canalizando magia...'
+  if (currentMode.value === 'register') return 'Reclamar Maestro'
+  if (currentMode.value === 'forgot') return 'Enviar Pergamino'
+  if (currentMode.value === 'reset') return 'Sellar Contraseña'
+  return 'Desplegar Tropas'
+})
+
+const setMode = (mode) => {
+  currentMode.value = mode
   authStore.error = null
+  // Limpiamos contraseñas y códigos por seguridad al cambiar de vista
+  form.password = ''
+  form.code = ''
 }
 
 const handleSubmit = async () => {
+  loading.value = true
   let success = false
-  if (isRegistering.value) {
-    success = await authStore.register(form.username, form.email, form.password, form.masterName)
-  } else {
-    success = await authStore.login(form.username, form.password)
-  }
 
-  if (success) {
-    router.push('/dashboard')
+  try {
+    if (currentMode.value === 'register') {
+      success = await authStore.register(form.username, form.email, form.password, form.masterName)
+      if (success) router.push('/dashboard')
+    } else if (currentMode.value === 'login') {
+      success = await authStore.login(form.username, form.password)
+      if (success) router.push('/dashboard')
+    } else if (currentMode.value === 'forgot') {
+      const res = await authStore.forgotPassword(form.email)
+      if (res.success) {
+        showAlert(res.message, 'success', 'Pergamino Enviado')
+        setMode('reset') // Pasamos directamente a la pantalla de poner el código
+      }
+    } else if (currentMode.value === 'reset') {
+      const res = await authStore.resetPassword(form.email, form.code, form.password)
+      if (res.success) {
+        showAlert(res.message, 'success', 'Contraseña Restaurada')
+        setMode('login') // Devolvemos al usuario al login
+      }
+    }
+  } finally {
+    loading.value = false
   }
 }
 
-// Al cargar, si ya había un tema guardado, aplicarlo
 onMounted(() => {
   if (authStore.masterName) {
     authStore.applyTheme(authStore.masterName)
   }
 })
 </script>
+
 <style scoped>
-/* Contenedor principal conectado al tema */
 .login-container {
   display: flex;
   justify-content: center;
@@ -128,7 +209,6 @@ onMounted(() => {
   transition: background-color 0.3s ease;
 }
 
-/* Tarjeta de login */
 .login-card {
   background: var(--panel-bg);
   padding: 2.5rem;
@@ -151,7 +231,14 @@ onMounted(() => {
   max-width: 500px !important;
 }
 
-/* Formularios */
+.instruction-text {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
 .form-group {
   margin-bottom: 1.2rem;
 }
@@ -179,7 +266,6 @@ onMounted(() => {
   border-color: var(--primary);
 }
 
-/* Mensaje de error */
 .error-msg {
   color: #ef4444;
   background-color: #fee2e2;
@@ -191,7 +277,6 @@ onMounted(() => {
   font-weight: bold;
 }
 
-/* Botones */
 .btn-primary {
   width: 100%;
   padding: 1rem;
@@ -207,8 +292,19 @@ onMounted(() => {
   transition: opacity 0.2s;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   opacity: 0.9;
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 1.5rem;
 }
 
 .btn-text {
@@ -216,7 +312,6 @@ onMounted(() => {
   background: none;
   border: none;
   color: var(--text-main);
-  margin-top: 1.5rem;
   cursor: pointer;
   text-decoration: underline;
   font-size: 0.9rem;
@@ -227,7 +322,10 @@ onMounted(() => {
   opacity: 1;
 }
 
-/* Cuadrícula de Maestros */
+.warning-text {
+  color: var(--stun, #ffaa00);
+}
+
 .master-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -271,7 +369,6 @@ onMounted(() => {
   color: var(--text-main);
 }
 
-/* Colores de selección activa (Fijos para que destaquen al seleccionar) */
 .master-card.icefrost.selected {
   border-color: #0284c7;
   background: #bae6fd;
@@ -304,7 +401,6 @@ onMounted(() => {
   color: #fef08a;
 }
 
-/* RESPONSIVIDAD */
 @media (max-width: 768px) {
   .login-container {
     padding: 15px;
@@ -358,11 +454,6 @@ onMounted(() => {
     font-size: 1rem;
   }
 
-  .btn-text {
-    font-size: 0.85rem;
-    margin-top: 1.2rem;
-  }
-
   .card-wide {
     max-width: 100% !important;
   }
@@ -380,7 +471,6 @@ onMounted(() => {
   .login-card {
     padding: 1.5rem;
     border-radius: 8px;
-    border: 2px solid var(--stroke);
     max-width: 100%;
     margin-top: 20px;
   }
@@ -390,57 +480,24 @@ onMounted(() => {
     margin-bottom: 1rem;
   }
 
-  .form-group {
-    margin-bottom: 0.8rem;
-  }
-
-  .form-group label {
-    font-size: 0.9rem;
-    margin-bottom: 0.4rem;
-  }
-
   .form-group input {
     padding: 0.6rem;
     font-size: 0.9rem;
-    border-radius: 6px;
   }
 
   .master-grid {
-    grid-template-columns: 1fr 1fr;
     gap: 6px;
     margin-top: 8px;
-  }
-
-  .master-card {
-    padding: 6px;
-    border-radius: 6px;
   }
 
   .master-card .emoji {
     width: 40px;
     height: 40px;
-    margin-bottom: 3px;
-  }
-
-  .master-card .name {
-    font-size: 0.7rem;
-  }
-
-  .error-msg {
-    padding: 0.6rem;
-    font-size: 0.8rem;
-    margin-bottom: 0.8rem;
   }
 
   .btn-primary {
     padding: 0.8rem;
     font-size: 0.9rem;
-    margin-top: 0.8rem;
-  }
-
-  .btn-text {
-    font-size: 0.75rem;
-    margin-top: 1rem;
   }
 }
 </style>

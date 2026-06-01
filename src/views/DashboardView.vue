@@ -113,6 +113,7 @@ import { ref, onMounted } from 'vue'
 import api from '../api/axios'
 import { useRouter } from 'vue-router'
 import { useDialog } from '../composables/useDialog'
+import { useAuthStore } from '../stores/auth' // <-- 1. Importamos la tienda de autenticación
 
 import ListaTareas from '../components/ListaTareas.vue'
 import PomodoroTimer from '../components/PomodoroTimer.vue'
@@ -120,6 +121,7 @@ import EquipoHeroes from '../components/EquipoHeroes.vue'
 
 const router = useRouter()
 const { showAlert } = useDialog()
+const authStore = useAuthStore() // <-- 2. Inicializamos la tienda
 
 const tareas = ref([])
 const equipo = ref([])
@@ -161,7 +163,6 @@ const cargarDatos = async () => {
 
 // --- MÉTODOS DE MÚSICA ---
 const extraerIdYoutube = (url) => {
-  // Regex para extraer el ID de casi cualquier formato de URL de Youtube
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
   const match = url.match(regExp)
   return match && match[2].length === 11 ? match[2] : null
@@ -175,7 +176,7 @@ const guardarMusica = () => {
     musicaId.value = id
     localStorage.setItem('youtubeMusicId', id)
     showAlert('El Bardo ha comenzado a tocar', 'success', 'Música Vinculada')
-    musicaUrl.value = '' // Limpiamos el input
+    musicaUrl.value = ''
   } else {
     showAlert('No se pudo reconocer el enlace de YouTube.', 'warning', 'Enlace Inválido')
   }
@@ -187,8 +188,7 @@ const detenerMusica = () => {
   showAlert('El Bardo se ha tomado un descanso.', 'info', 'Silenciado')
 }
 
-// --- MÉTODOS PARA CONTROLAR LAS TAREAS DESDE EL DASHBOARD ---
-
+// --- MÉTODOS PARA CONTROLAR LAS TAREAS ---
 const agregarTarea = async (titulo) => {
   try {
     const res = await api.post('/tareas', { titulo, completada: false })
@@ -258,7 +258,6 @@ const registrarEntrenamiento = async () => {
 }
 
 const abrirBatalla = () => {
-  // Si no hay equipo, mostramos alerta y no abrimos el popup
   if (!equipo.value || equipo.value.length === 0) {
     showAlert(
       'Tu equipo activo está vacío. ¡Ve al Campamento y prepara a tus héroes antes de luchar!',
@@ -267,28 +266,23 @@ const abrirBatalla = () => {
     )
     return
   }
-
   const routeData = router.resolve({ path: '/battle' })
-
-  // Guardamos la referencia a la ventana que acabamos de abrir
   const ventanaBatalla = window.open(
     routeData.href,
     '_blank',
     'width=1280,height=800,menubar=no,toolbar=no,location=no,status=no',
   )
-
-  // Intervalo que vigila si la ventana de batalla se ha cerrado
   const monitorVentana = setInterval(() => {
-    // Si la ventana es nula o se ha cerrado
     if (!ventanaBatalla || ventanaBatalla.closed) {
-      clearInterval(monitorVentana) // Detenemos el monitor
-      cargarDatos() // Refrescamos todos los datos del dashboard
+      clearInterval(monitorVentana)
+      cargarDatos()
     }
-  }, 500) // Comprueba el estado cada 500 milisegundos
+  }, 500)
 }
+
 const logout = () => {
-  localStorage.removeItem('token')
-  localStorage.removeItem('username')
+  // <-- 3. Usamos la función oficial de la tienda que limpia Pinia y LocalStorage
+  authStore.logout()
   router.push('/')
 }
 
@@ -299,11 +293,10 @@ onMounted(() => {
 
 <style scoped>
 .page-shell {
-  background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-secondary) 30%);
+  background: transparent;
   min-height: 100vh;
   font-family: sans-serif;
   padding: 20px;
-  transition: background 0.3s ease;
 }
 
 .dashboard-container {
@@ -315,7 +308,12 @@ onMounted(() => {
 }
 
 .page-card {
-  background: linear-gradient(135deg, var(--panel-bg) 0%, var(--panel-hover, #4a2f7a) 100%);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--panel-bg) 85%, transparent) 0%,
+    color-mix(in srgb, var(--panel-hover, #4a2f7a) 85%, transparent) 100%
+  );
+  backdrop-filter: blur(8px);
   border-radius: 14px;
   padding: 24px;
   border: 3px solid var(--stroke-light, #4a2f7a);
