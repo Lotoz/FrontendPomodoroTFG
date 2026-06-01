@@ -252,7 +252,9 @@ onMounted(() => {
 }
 
 .master-card .emoji {
-  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
   margin-bottom: 5px;
 }
 
@@ -336,7 +338,8 @@ onMounted(() => {
   }
 
   .master-card .emoji {
-    font-size: 1.5rem;
+    width: 45px;
+    height: 45px;
   }
 
   .master-card .name {
@@ -407,7 +410,8 @@ onMounted(() => {
   }
 
   .master-card .emoji {
-    font-size: 1.3rem;
+    width: 40px;
+    height: 40px;
     margin-bottom: 3px;
   }
 

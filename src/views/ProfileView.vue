@@ -112,13 +112,17 @@ onMounted(() => {
   <div class="page-shell">
     <div class="settings-container">
       <header class="header-top">
-        <h1><img src="/iconsApp/config.png" alt="Ajustes" class="h1-icon" /> Ajustes de la Fortaleza</h1>
+        <h1>
+          <img src="/iconsApp/config.png" alt="Ajustes" class="h1-icon" /> Ajustes de la Fortaleza
+        </h1>
         <button @click="router.push('/dashboard')" class="btn-back">Volver al Tablón</button>
       </header>
 
       <div class="settings-grid">
         <section class="panel">
-          <h3><img src="/iconsApp/user.png" alt="Comandante" class="h3-icon" /> Datos del Comandante</h3>
+          <h3>
+            <img src="/iconsApp/user.png" alt="Comandante" class="h3-icon" /> Datos del Comandante
+          </h3>
 
           <div class="form-group">
             <label>Nombre de Usuario</label>
@@ -208,7 +212,10 @@ onMounted(() => {
         </section>
 
         <section class="panel pomodoro-panel">
-          <h3><img src="/iconsApp/troph.png" alt="Entrenamiento" class="h3-icon" /> Entrenamiento (Pomodoro)</h3>
+          <h3>
+            <img src="/iconsApp/troph.png" alt="Entrenamiento" class="h3-icon" /> Entrenamiento
+            (Pomodoro)
+          </h3>
 
           <div class="form-group">
             <label>Tiempo de Trabajo (minutos)</label>
@@ -294,7 +301,8 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
 }
-.h1-icon, .h3-icon {
+.h1-icon,
+.h3-icon {
   width: 28px;
   height: 28px;
   object-fit: contain;
@@ -360,6 +368,11 @@ onMounted(() => {
 
   .master-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .master-card .emoji {
+    width: 45px;
+    height: 45px;
   }
 }
 
@@ -432,7 +445,8 @@ onMounted(() => {
   }
 
   .master-card .emoji {
-    font-size: 1.5rem;
+    width: 45px;
+    height: 45px;
   }
 
   .master-card .name {
@@ -510,7 +524,8 @@ onMounted(() => {
   }
 
   .master-card .emoji {
-    font-size: 1.2rem;
+    width: 40px;
+    height: 40px;
     margin-bottom: 3px;
   }
 
@@ -611,7 +626,9 @@ onMounted(() => {
   transform: scale(1.05);
 }
 .master-card .emoji {
-  font-size: 1.8rem;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
   margin-bottom: 5px;
 }
 .master-card .name {
