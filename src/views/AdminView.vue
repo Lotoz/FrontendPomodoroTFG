@@ -17,7 +17,7 @@
             Consultando los archivos de la Fortaleza...
           </div>
 
-          <div v-else-if="usuarios.length === 0" class="status-message empty-message">
+          <div v-else-if="!usuarios || usuarios.length === 0" class="status-message empty-message">
             No hay usuarios a editar.
           </div>
 
@@ -131,7 +131,7 @@ const cargarUsuarios = async () => {
   cargando.value = true
   try {
     const res = await api.get('/admin/users')
-    usuarios.value = res.data
+    usuarios.value = Array.isArray(res.data) ? res.data : []
   } catch (error) {
     showAlert(
       'No tienes permisos para ver esta sala o la sesión ha caducado.',
