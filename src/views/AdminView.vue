@@ -17,6 +17,10 @@
             Consultando los archivos de la Fortaleza...
           </div>
 
+          <div v-else-if="usuarios.length === 0" class="status-message empty-message">
+            No hay usuarios a editar.
+          </div>
+
           <div v-else class="table-responsive">
             <table class="rpg-table">
               <thead>
@@ -270,6 +274,22 @@ onMounted(() => {
   margin-bottom: 20px;
   border-bottom: 2px solid var(--stroke);
   padding-bottom: 10px;
+}
+
+/* MENSAJES DE ESTADO */
+.status-message {
+  text-align: center;
+  padding: 30px;
+  font-size: 1.1rem;
+  color: var(--primary-light, #d99fff);
+  font-style: italic;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: 1px dashed var(--stroke);
+}
+
+.empty-message {
+  color: var(--text-muted, #999);
 }
 
 /* Tabla RPG */
