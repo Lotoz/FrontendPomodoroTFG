@@ -8,7 +8,8 @@ import BestiaryView from '../views/BestiaryView.vue'
 import TavernView from '../views/TavernView.vue'
 import BattleView from '../views/BattleView.vue'
 import GraveyardView from '../views/GraveyardView.vue'
-import CampView from '../views/CampView.vue' // Importamos el campamento
+import CampView from '../views/CampView.vue'
+import AdminView from '../views/AdminView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,7 +22,8 @@ const router = createRouter({
     { path: '/heroes', name: 'taberna', component: TavernView, meta: { requiresAuth: true } },
     { path: '/battle', name: 'battle', component: BattleView, meta: { requiresAuth: true } },
     { path: '/cementerio', name: 'cementerio', component: GraveyardView, meta: { requiresAuth: true } },
-    { path: '/campamento', name: 'campamento', component: CampView, meta: { requiresAuth: true } } // Añadida la ruta
+    { path: '/campamento', name: 'campamento', component: CampView, meta: { requiresAuth: true } },
+    { path: '/admin', name: 'admin', component: AdminView, meta: { requiresAuth: true } }
   ]
 })
 

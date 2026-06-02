@@ -103,6 +103,47 @@ const savePomodoro = async () => {
     savingPomodoro.value = false
   }
 }
+const confirmResetProgress = async () => {
+  const confirm = await showConfirm(
+    '¿Estás seguro de que quieres reducir tu progreso a cenizas? Perderás todo tu equipo, bestias y misiones. Esta acción no se puede deshacer.',
+    '¿Reiniciar Progreso?',
+  )
+  if (!confirm) return
+
+  resettingProgress.value = true
+  try {
+    const res = await api.post('/auth/reset-progress')
+    showAlert(res.data.message, 'success', 'Progreso Reiniciado')
+  } catch (e) {
+    const errorMsg = e.response?.data?.message || 'Error al reiniciar el progreso'
+    showAlert(errorMsg, 'error', 'Error')
+  } finally {
+    resettingProgress.value = false
+  }
+}
+
+const confirmDeleteAccount = async () => {
+  const confirm = await showConfirm(
+    '¿Estás absolutamente seguro de que quieres destruir la Fortaleza? Tu cuenta y todo tu progreso serán eliminados para siempre.',
+    '¿Eliminar Cuenta?',
+  )
+  if (!confirm) return
+
+  deletingAccount.value = true
+  try {
+    const res = await api.post('/auth/delete-account')
+    showAlert(res.data.message, 'success', 'Fortaleza Destruida')
+
+    // Limpiamos la sesión y expulsamos al jugador al login
+    authStore.logout()
+    router.push('/')
+  } catch (e) {
+    const errorMsg = e.response?.data?.message || 'Error al eliminar la cuenta'
+    showAlert(errorMsg, 'error', 'Error')
+  } finally {
+    deletingAccount.value = false
+  }
+}
 
 onMounted(() => {
   cargarDatos()
@@ -209,6 +250,26 @@ onMounted(() => {
           <button @click="savePassword" :disabled="savingPassword" class="btn-save">
             {{ savingPassword ? 'Actualizando...' : 'Cambiar Contraseña' }}
           </button>
+        </section>
+        <section class="panel danger-panel">
+          <h3><img src="/iconsApp/warning.png" alt="Peligro" class="h3-icon" /> Zona de Peligro</h3>
+          <p class="danger-text">
+            Estas acciones son irreversibles. Procede con precaución, Comandante.
+          </p>
+
+          <div class="danger-buttons">
+            <button
+              @click="confirmResetProgress"
+              :disabled="resettingProgress"
+              class="btn-danger-outline"
+            >
+              {{ resettingProgress ? 'Destruyendo...' : 'Reiniciar Progreso' }}
+            </button>
+
+            <button @click="confirmDeleteAccount" :disabled="deletingAccount" class="btn-danger">
+              {{ deletingAccount ? 'Aniquilando...' : 'Eliminar Cuenta' }}
+            </button>
+          </div>
         </section>
 
         <section class="panel pomodoro-panel">
@@ -671,5 +732,80 @@ onMounted(() => {
 }
 .master-card.lotoz.selected .name {
   color: #fef08a;
+}
+
+/* ==========================================
+   ZONA DE PELIGRO
+   ========================================== */
+.danger-panel {
+  grid-column: 1 / -1;
+  border-color: #ef4444;
+  background: linear-gradient(135deg, var(--panel-bg) 0%, rgba(239, 68, 68, 0.05) 100%);
+}
+
+.danger-panel h3 {
+  color: #ef4444;
+  border-bottom-color: rgba(239, 68, 68, 0.3);
+}
+
+.danger-text {
+  color: var(--text-main);
+  opacity: 0.8;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.danger-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-danger-outline {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  color: #ef4444;
+  border: 2px solid #ef4444;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 200px;
+}
+
+.btn-danger-outline:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  flex: 1;
+  padding: 12px;
+  background: #ef4444;
+  color: white;
+  border: 2px solid #ef4444;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 200px;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+  border-color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:disabled,
+.btn-danger-outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 </style>

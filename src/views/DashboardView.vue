@@ -30,6 +30,9 @@
             <button @click="router.push('/perfil')" class="btn-nav">
               <img src="/iconsApp/config.png" alt="Perfil" /> Perfil
             </button>
+            <button v-if="isAdmin" @click="router.push('/admin')" class="btn-nav admin-btn">
+              <img src="/iconsApp/fortress.png" alt="Admin" /> Sala de Mando
+            </button>
 
             <button @click="logout" class="btn-logout">Abandonar Partida</button>
           </div>
@@ -132,7 +135,8 @@ const configPomodoro = ref({
   longBreakDurationMinutes: 30,
   cyclesBeforeLongBreak: 4,
 })
-
+//Variable admin
+const isAdmin = ref(false)
 // Variables para el reproductor de música
 const musicaUrl = ref('')
 const musicaId = ref('')
@@ -158,6 +162,18 @@ const cargarDatos = async () => {
   } catch (error) {
     console.error('Error al cargar los datos de la fortaleza:', error)
     if (error.response?.status === 401) router.push('/')
+  }
+}
+//Verificar si el usuario es admin para mostrar el botón de Sala de Mando
+const verificarAdmin = async () => {
+  try {
+    // Hacemos un "toque" a la puerta de la sala de mando
+    await api.get('/admin/users')
+    // Si Java nos deja pasar, mostramos el botón
+    isAdmin.value = true
+  } catch (error) {
+    // Si Java nos bloquea (403), lo mantenemos oculto
+    isAdmin.value = false
   }
 }
 
@@ -280,6 +296,7 @@ const logout = () => {
 
 onMounted(() => {
   cargarDatos()
+  verificarAdmin()
 })
 </script>
 
@@ -521,6 +538,21 @@ onMounted(() => {
   overflow: hidden;
   border: 2px solid var(--primary-dark);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.admin-btn {
+  border-color: #ffd700;
+  color: #ffd700;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(200, 150, 0, 0.1) 100%);
+}
+
+.admin-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(200, 150, 0, 0.3) 100%);
+  color: white;
+  border-color: #ffd700;
+  box-shadow:
+    0 0 20px rgba(255, 215, 0, 0.4),
+    0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* RESPONSIVIDAD */
