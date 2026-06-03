@@ -66,7 +66,7 @@
                 </div>
                 <div class="hud-badges">
                   <span class="badge armor"
-                    ><img src="/iconsApp/iconoEquipo.png" alt="Armadura" /> ARM:
+                    ><img src="/iconsApp/escudo.png" alt="Armadura" /> ARM:
                     {{ heroeActivo.armor || 0 }}</span
                   >
                   <span v-if="heroeActivo.isStunned" class="badge stun"

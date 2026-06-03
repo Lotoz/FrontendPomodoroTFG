@@ -68,30 +68,76 @@ const pasos = [
     descripcion:
       'Esta es una aplicación que combina la técnica de estudio Pomodoro con un mundo de fantasía RPG. ¡Estudia, mejora tu productividad y lidera a tus ejércitos!',
     icono: '/iconsApp/fortress.png',
+    imagen: '/tutorial/inicio.png',
   },
   {
     titulo: 'Misiones y Productividad',
     descripcion:
       'Anota tus tareas diarias en el Tablón de Misiones. Completa tus objetivos en la vida real y táchalos aquí para mantener el control de tu imperio.',
     icono: '/iconsApp/star.png',
+    imagen: '/tutorial/misiones.png',
   },
   {
     titulo: 'Entrenamiento Pomodoro',
     descripcion:
-      'Usa el temporizador Pomodoro para tus sesiones de estudio o trabajo. Al completar ciclos, tus tropas y tu Fortaleza prosperarán.',
+      'Usa el temporizador Pomodoro para tus sesiones de estudio o trabajo. Al completar ciclos, tus héroes equipados subiran de nivel y recuperan su estado.',
     icono: '/iconsApp/troph.png',
+    imagen: '/tutorial/pomodoro.png',
   },
   {
     titulo: 'Recluta y Gestiona tu Ejército',
     descripcion:
-      'Visita la Taberna para reclutar nuevos héroes. Luego, ve al Campamento para armar tu equipo activo de guerreros antes de salir a explorar.',
+      'Visita la Taberna para reclutar nuevos héroes que podras seleccionar en el campamento. Selecciona correctamente a tus héroes para las batallas, cada uno tiene habilidades únicas, pero solo podras reclutar un maximo de 10 héroes. Avanza mas en la conquista del mundo para poder reclutar mas!',
     icono: '/iconsApp/beer.png',
+    imagen: '/tutorial/taberna.png',
+  },
+  {
+    titulo: 'Gestiona tu equipo',
+    descripcion:
+      'En el campamento puedes gestionar a tu equipo de héroes, tu equipo de héroes solo podra ser maximo 4, por ende elige sabiamente a tus héroes para las batalla.',
+    icono: '/iconsApp/camp.png',
+    imagen: '/tutorial/camp.png',
   },
   {
     titulo: 'La Zona de Batalla',
     descripcion:
       'Cuando estés listo, envía a tus héroes a luchar contra las fuerzas oscuras en un combate por turnos. ¡Si mueren, terminarán en el Cementerio!',
     icono: '/iconsApp/sword.png',
+    imagen: '/tutorial/zonaBatalla.png',
+  },
+  {
+    titulo: 'Como combatir!',
+    descripcion:
+      'En la zona de batalla dispondras de dos botones, Atacar y Huir, el boton de atacar hara que tus héroes ataquen a los enemigos, mientras que el boton de huir hara que tus héroes huyan de la batalla, ten cuidado, si huyes perderas la batalla y a los héroes caidos, y perderas todo el avance de zona, ya que la oscuridad aprovechara para avanzar.',
+    icono: '/iconsApp/sword.png',
+    imagen: '/tutorial/botonesBatalla.png',
+  },
+  {
+    titulo: 'Como combatir!',
+    descripcion:
+      'Para combatir, selecciona el boton atacar y a tu enemigo en eleccion. Deberas hacerlo por cada heroe de tu equipo. Al finalizar esta eleccion, se ejecutara el turno.',
+    icono: '/iconsApp/sword.png',
+    imagen: '/tutorial/selectBattle.png',
+  },
+  {
+    titulo: 'Jefes!',
+    descripcion:
+      'Cada zona de mundo, consta de 10 fases, deberas superar todas para pasar al siguiente mundo. Pero ten cuidado, en la fase 10 de cada mundo, te enfrentaras a un jefe, el cual es mas fuerte que los enemigos comunes, y tendras que usar toda tu estrategia para vencerlo.',
+    icono: '/iconsApp/sword.png',
+    imagen: '/tutorial/jefeBattle.png',
+  },
+  {
+    titulo: 'Habilidades especiales!',
+    descripcion:
+      'Tanto algunas bestias como héroes, disponen de habilidades especiales. Descubre cada una de ellas desbloqueandolas! Cuando lo hagas, veras un nuevo boton en la zona de batalla, el cual te permitira usar la habilidad especial de tu heroe.',
+    icono: '/iconsApp/sword.png',
+  },
+  {
+    titulo: 'Bestiario',
+    descripcion:
+      'El conocimiento es poder! En el Bestiario podrás consultar información detallada sobre cada enemigo que hayas enfrentado, sus habilidades, debilidades y estrategias para vencerlos. ¡Usa esta información para planificar tus próximas batallas!',
+    icono: '/iconsApp/bestiario.png',
+    imagen: '/tutorial/bestiario.png',
   },
   {
     titulo: '¡Todo listo, Comandante!',
