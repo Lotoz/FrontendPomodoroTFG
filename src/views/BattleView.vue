@@ -117,14 +117,16 @@
                     'anim-heal': defensorActivo === heroe.id && textoCinematica.includes('cur'),
                     'anim-hit':
                       defensorActivo === heroe.id &&
+                      heroe.currentLife > 0 &&
                       !textoCinematica.includes('cur') &&
                       !textoCinematica.includes('CRÍTICO'),
-                    'anim-crit': defensorActivo === heroe.id && textoCinematica.includes('CRÍTICO'),
+                    'anim-crit':
+                      defensorActivo === heroe.id &&
+                      heroe.currentLife > 0 &&
+                      textoCinematica.includes('CRÍTICO'),
                     'anim-exhausted':
                       textoCinematica.includes('exhausto') && textoCinematica.includes(heroe.name),
-                    'anim-death':
-                      muertosRecientes.includes(heroe.id) ||
-                      (!modoCinematica && heroe.currentLife <= 0),
+                    'anim-death': heroe.currentLife <= 0,
                   }"
                 />
               </div>
@@ -166,15 +168,16 @@
                     'anim-heal': defensorActivo === bestia.id && textoCinematica.includes('cur'),
                     'anim-hit':
                       defensorActivo === bestia.id &&
+                      bestia.currentLife > 0 &&
                       !textoCinematica.includes('cur') &&
                       !textoCinematica.includes('CRÍTICO'),
                     'anim-crit':
-                      defensorActivo === bestia.id && textoCinematica.includes('CRÍTICO'),
+                      defensorActivo === bestia.id &&
+                      bestia.currentLife > 0 &&
+                      textoCinematica.includes('CRÍTICO'),
                     'anim-exhausted':
                       textoCinematica.includes('exhausto') && textoCinematica.includes(bestia.name),
-                    'anim-death':
-                      muertosRecientes.includes(bestia.id) ||
-                      (!modoCinematica && bestia.currentLife <= 0),
+                    'anim-death': bestia.currentLife <= 0,
                     'is-boss': bestia.name.includes('[JEFE]'),
                   }"
                 />
@@ -407,7 +410,8 @@ const ejecutarRonda = async () => {
                 heroes.value.find((h) => h.id === defensorActivo.value) ||
                 bestias.value.find((b) => b.id === defensorActivo.value)
               if (objetivo) {
-                objetivo.currentLife = Math.max(0, objetivo.currentLife - dmg)
+                let dañoReal = dmg <= objetivo.armor ? 1 : dmg - objetivo.armor
+                objetivo.currentLife = Math.max(0, objetivo.currentLife - dañoReal)
               }
             }
           }
