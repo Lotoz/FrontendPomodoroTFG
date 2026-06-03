@@ -28,7 +28,6 @@
               <div class="card-header">
                 <img :src="obtenerIcono(oferta.heroClass)" alt="Icono Héroe" class="hero-icon" />
                 <h3>{{ oferta.name }}</h3>
-                <span class="class-badge">{{ traducirClase(oferta.heroClass) }}</span>
               </div>
               <div class="card-stats">
                 <p>
@@ -105,18 +104,6 @@ const obtenerIcono = (clase) => {
   }
   return rutas[clase] || '/iconsApp/iconoEquipo.png'
 }
-
-const traducirClase = (clase) => {
-  const diccionario = {
-    Warrior: 'Caballero',
-    Dwarf: 'Enano',
-    Elf: 'Elfo',
-    Cleric: 'Clérigo',
-    Wizard: 'Mago',
-  }
-  return diccionario[clase] || clase
-}
-
 const cargarDatosTaberna = async () => {
   cargando.value = true
   try {
@@ -318,16 +305,7 @@ section h2 {
   color: var(--text-main);
   font-size: 1.1rem;
 }
-.class-badge {
-  display: inline-block;
-  background: var(--stroke);
-  color: var(--text-main);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
+
 .card-stats p {
   margin: 5px 0;
   color: var(--text-main);

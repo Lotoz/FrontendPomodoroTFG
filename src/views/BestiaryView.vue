@@ -22,7 +22,7 @@ const cargarBestiario = async (bando = 'todos') => {
   cargando.value = true
   filtroActual.value = bando
   try {
-    const url = bando === 'todos' ? '/bestiario' : `/bestiario/bando/${bando}`
+    const url = bando === 'todos' ? '/bestiary' : `/bestiary/team/${bando}`
     const res = await api.get(url)
     entradas.value = res.data
     indiceActual.value = 0
