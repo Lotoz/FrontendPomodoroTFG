@@ -68,7 +68,6 @@ const pasos = [
     descripcion:
       'Esta es una aplicación que combina la técnica de estudio Pomodoro con un mundo de fantasía RPG. ¡Estudia, mejora tu productividad y lidera a tus ejércitos!',
     icono: '/iconsApp/fortress.png',
-    imagen: '/tutorial/inicio.png',
   },
   {
     titulo: 'Misiones y Productividad',

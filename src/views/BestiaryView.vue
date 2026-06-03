@@ -11,8 +11,11 @@ const cargando = ref(true)
 // Índice para la paginación del libro
 const indiceActual = ref(0)
 
-// Propiedad computada para obtener el personaje que estamos viendo ahora mismo
-const entradaActual = computed(() => entradas.value[indiceActual.value])
+// Propiedad computada SEGURA para obtener el personaje que estamos viendo ahora mismo
+const entradaActual = computed(() => {
+  if (!entradas.value || entradas.value.length === 0) return null
+  return entradas.value[indiceActual.value]
+})
 
 // Función para cargar los datos desde el backend
 const cargarBestiario = async (bando = 'todos') => {
@@ -94,17 +97,17 @@ onMounted(() => {
           <div class="book-spine"></div>
 
           <transition name="page-turn" mode="out-in">
-            <div class="book-pages-container" :key="entradaActual.id">
+            <div class="book-pages-container" :key="entradaActual?.id || 'empty'">
               <div class="book-page left-page">
                 <div class="image-frame">
                   <img
-                    v-if="entradaActual.photo"
-                    :src="entradaActual.photo"
-                    :alt="entradaActual.name"
+                    v-if="entradaActual?.photo"
+                    :src="entradaActual?.photo"
+                    :alt="entradaActual?.name"
                   />
                   <span class="emoji-placeholder">
                     <img
-                      v-if="entradaActual.team === 'hero'"
+                      v-if="entradaActual?.team === 'hero'"
                       src="/iconsApp/sword.png"
                       alt="Héroe"
                     />
@@ -112,9 +115,9 @@ onMounted(() => {
                   </span>
                 </div>
                 <div class="character-identity">
-                  <h2>{{ entradaActual.name }}</h2>
-                  <span :class="['badge', entradaActual.team]">
-                    {{ entradaActual.team === 'hero' ? 'Bando: Héroe' : 'Bando: Bestia' }}
+                  <h2>{{ entradaActual?.name }}</h2>
+                  <span :class="['badge', entradaActual?.team]">
+                    {{ entradaActual?.team === 'hero' ? 'Bando: Héroe' : 'Bando: Bestia' }}
                   </span>
                 </div>
               </div>
@@ -123,10 +126,10 @@ onMounted(() => {
                 <div class="lore-content">
                   <p class="zone">
                     <img src="/iconsApp/star.png" alt="Zona" class="inline-icon" />
-                    <strong>Hábitat / Zona:</strong> {{ entradaActual.zone }}
+                    <strong>Hábitat / Zona:</strong> {{ entradaActual?.zone }}
                   </p>
                   <div class="divider"></div>
-                  <p class="description">{{ entradaActual.description }}</p>
+                  <p class="description">{{ entradaActual?.description }}</p>
                 </div>
               </div>
             </div>
@@ -486,12 +489,12 @@ onMounted(() => {
 
 .page-turn-enter-from {
   opacity: 0;
-  transform: translateX(15px); /* Entra deslizándose ligeramente desde la derecha */
+  transform: translateX(15px);
 }
 
 .page-turn-leave-to {
   opacity: 0;
-  transform: translateX(-15px); /* Sale deslizándose hacia la izquierda */
+  transform: translateX(-15px);
 }
 
 /* --- Responsividad --- */
@@ -682,55 +685,6 @@ onMounted(() => {
 
   .status-message {
     padding: 30px 15px;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 850px) {
-  .book-pages-container {
-    flex-direction: column;
-  }
-
-  .book-spine {
-    width: 100%;
-    height: 4px;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .book-page {
-    width: 100%;
-    padding: 25px;
-  }
-
-  .left-page {
-    border-bottom: 3px solid var(--stroke);
-  }
-
-  .image-frame {
-    max-width: 250px;
-    margin-bottom: 20px;
-  }
-
-  .character-identity h2 {
-    font-size: 1.6rem;
-  }
-
-  .description {
-    font-size: 1rem;
-  }
-
-  .book-controls {
-    padding: 12px 20px;
-  }
-
-  .btn-page {
-    font-size: 0.95rem;
-    padding: 8px 16px;
-  }
-
-  .page-indicator {
     font-size: 1rem;
   }
 }
