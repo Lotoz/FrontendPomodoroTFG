@@ -792,18 +792,17 @@ onMounted(() => {
   box-shadow: 0 0 6px rgba(255, 68, 102, 0.6);
 }
 
-/* =========== ARREGLO DE COLISION DEL JEFE ============= */
 .sprite-wrapper {
   min-width: 90px;
-  height: 140px; /* ALTO FIJO: Evita que el contenedor crezca y empuje el panel inferior */
+  height: 140px;
   display: flex;
   justify-content: center;
+  align-items: flex-end;
   position: relative;
+  margin-top: 15px;
 }
 
 .battle-sprite {
-  position: absolute; /* CLAVE: La imagen flota por encima sin ocupar espacio físico en la cuadrícula */
-  bottom: 0;
   height: 170px;
   object-fit: contain;
   filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 10px rgba(179, 102, 255, 0.2));
@@ -813,10 +812,10 @@ onMounted(() => {
 }
 
 .is-boss {
+  height: 190px !important;
   z-index: 2;
-  /* Aura amenazante fija para que no rompa las animaciones de daño/ataque */
   filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 20px #ff0000)
-    drop-shadow(0 0 35px #ffd700);
+    drop-shadow(0 0 35px #ffd700) !important;
 }
 /* ====================================================== */
 
