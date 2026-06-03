@@ -28,8 +28,8 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
-import { useDialog } from '@/composables/useDialog'
+import { useAuthStore } from '../../stores/auth'
+import { useDialog } from '../../composables/useDialog'
 
 const props = defineProps({
   email: { type: String, required: true },
