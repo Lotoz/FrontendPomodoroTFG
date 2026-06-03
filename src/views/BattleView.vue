@@ -319,7 +319,6 @@ const cargarEstado = async () => {
   } catch (error) {
     if (error.response?.status === 400) {
       showAlert(error.response.data, 'error', 'Error')
-      // Retrasamos el cierre 3.5 segundos para que puedan leer el CustomAlert
       setTimeout(() => {
         cerrarVentana()
       }, 3500)
@@ -357,18 +356,12 @@ const seleccionarObjetivo = async (idObjetivo, tipoPersonaje) => {
   }
 }
 
-// Búsqueda estricta por nombre exacto para evitar confundir "Orco A" con "Orco B"
 const buscarIdPorNombre = (nombreStr) => {
   const nom = nombreStr.trim()
-
-  //  Buscar en vivos primero, coincidencia EXACTA
   let fighter = heroes.value.find((h) => h.name === nom && h.currentLife > 0)
   if (!fighter) fighter = bestias.value.find((b) => b.name === nom && b.currentLife > 0)
-
-  // Si no encuentra vivos, buscar en muertos, coincidencia EXACTA
   if (!fighter) fighter = heroes.value.find((h) => h.name === nom)
   if (!fighter) fighter = bestias.value.find((b) => b.name === nom)
-
   return fighter ? fighter.id : null
 }
 
@@ -376,22 +369,17 @@ const ejecutarRonda = async () => {
   try {
     modoCinematica.value = true
     textoCinematica.value = '¡Comienza la refriega!'
-
     atacanteActivo.value = null
     defensorActivo.value = null
-    // NO limpiamos muertosRecientes aquí al inicio, lo haremos al final de toda la ronda
-    // Esto asegura que los que ya murieron mantengan la opacidad/filtro gris.
 
     const res = await api.post('/combat/execute-round', accionesPendientes.value)
 
     if (res.data.combatLogs && res.data.combatLogs.length > 0) {
       for (const log of res.data.combatLogs) {
         textoCinematica.value = log
-
         atacanteActivo.value = null
         defensorActivo.value = null
 
-        // Quitamos la etiqueta de crítico visualmente para la lógica de separación de nombres
         let cleanLog = log.replace('¡GOLPE CRÍTICO! ', '')
 
         if (cleanLog.includes('atacó a')) {
@@ -399,7 +387,6 @@ const ejecutarRonda = async () => {
           if (partes.length > 1) {
             const nombreAtacante = partes[0]
             const nombreDefensor = partes[1].split(' por ')[0]
-
             atacanteActivo.value = buscarIdPorNombre(nombreAtacante)
             defensorActivo.value = buscarIdPorNombre(nombreDefensor)
 
@@ -439,7 +426,6 @@ const ejecutarRonda = async () => {
             defensorActivo.value = buscarIdPorNombre(partes[1].split(' con')[0])
           }
         } else if (cleanLog.includes('muerto') || cleanLog.includes('destruido')) {
-          // FIX: Regex mejorado para capturar el nombre exacto antes de " ha "
           const muerteMatch = cleanLog.match(/^(?:¡)?(.*?)\sha\s/)
           if (muerteMatch && muerteMatch[1]) {
             let nombreCaido = muerteMatch[1].trim()
@@ -456,9 +442,6 @@ const ejecutarRonda = async () => {
 
     atacanteActivo.value = null
     defensorActivo.value = null
-    // La lista de muertos recientes la limpiamos solo después de actualizar la pantalla
-    // para que la nueva ronda los detecte como ya muertos nativamente (currentLife <= 0)
-
     actualizarPantalla(res.data)
     modoCinematica.value = false
   } catch (error) {
@@ -472,9 +455,7 @@ const retirarJugador = async () => {
     '¿Seguro que quieres huir? Volverás a la etapa 1 de esta zona.',
     'Confirmar Retirada',
   )
-
   if (!resultado) return
-
   try {
     const res = await api.post('/world/retreat')
     showAlert(res.data, 'success', 'Retirada Exitosa')
@@ -504,7 +485,7 @@ const actualizarPantalla = (data) => {
 
   accionesPendientes.value = []
   indiceHeroeActual.value = 0
-  muertosRecientes.value = [] // Se limpia aquí
+  muertosRecientes.value = []
 }
 
 onMounted(() => {
@@ -551,7 +532,6 @@ onMounted(() => {
   backdrop-filter: blur(1px);
 }
 
-/* Pantallas Finales */
 .end-screen {
   position: absolute;
   z-index: 100;
@@ -638,7 +618,6 @@ onMounted(() => {
   z-index: 10;
 }
 
-/* --- HUD SUPERIOR --- */
 .top-hud {
   display: flex;
   justify-content: space-between;
@@ -743,7 +722,6 @@ onMounted(() => {
   background: linear-gradient(135deg, rgba(255, 68, 102, 0.3) 0%, rgba(200, 50, 80, 0.2) 100%);
 }
 
-/* --- ESCENARIO --- */
 .battlefield {
   flex-grow: 1;
   display: flex;
@@ -814,15 +792,18 @@ onMounted(() => {
   box-shadow: 0 0 6px rgba(255, 68, 102, 0.6);
 }
 
+/* =========== ARREGLO DE COLISION DEL JEFE ============= */
 .sprite-wrapper {
   min-width: 90px;
-  min-height: 130px;
+  height: 140px; /* ALTO FIJO: Evita que el contenedor crezca y empuje el panel inferior */
   display: flex;
   justify-content: center;
-  align-items: flex-end;
   position: relative;
 }
+
 .battle-sprite {
+  position: absolute; /* CLAVE: La imagen flota por encima sin ocupar espacio físico en la cuadrícula */
+  bottom: 0;
   height: 170px;
   object-fit: contain;
   filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 10px rgba(179, 102, 255, 0.2));
@@ -833,9 +814,9 @@ onMounted(() => {
 
 .is-boss {
   height: 250px !important;
-  filter: drop-shadow(0 10px 15px rgba(255, 68, 102, 0.4)) !important;
-  z-index: 2;
+  z-index: 2; /* Al ser absoluto crecerá hacia arriba invadiendo el campo libre */
 }
+/* ====================================================== */
 
 .is-active .battle-sprite {
   transform: translateY(-15px) scale(1.08);
@@ -871,12 +852,10 @@ onMounted(() => {
   transform: scale(1.12);
 }
 
-/* --- ANIMACIONES DE COMBATE --- */
 .anim-attack {
   animation: lunge 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   filter: drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 10px rgba(255, 215, 0, 0.6)) brightness(1.3);
 }
-
 @keyframes lunge {
   0% {
     transform: translateX(0) scaleX(1);
@@ -888,11 +867,9 @@ onMounted(() => {
     transform: translateX(0) scaleX(1);
   }
 }
-
 .enemy-sprite.anim-attack {
   animation: lunge-reverse 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-
 @keyframes lunge-reverse {
   0% {
     transform: translateX(0) scaleX(1);
@@ -904,13 +881,11 @@ onMounted(() => {
     transform: translateX(0) scaleX(1);
   }
 }
-
 .anim-heal {
   animation: heal-pulse 0.8s ease;
   filter: drop-shadow(0 0 25px #66ff99) drop-shadow(0 0 15px rgba(102, 255, 153, 0.8))
     brightness(1.4) !important;
 }
-
 @keyframes heal-pulse {
   0%,
   100% {
@@ -920,13 +895,11 @@ onMounted(() => {
     transform: scale(1.1) translateY(-10px);
   }
 }
-
 .anim-hit {
   animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   filter: drop-shadow(0 0 25px #ff4466) drop-shadow(0 0 15px rgba(255, 68, 102, 0.8)) sepia(0.8)
     hue-rotate(-50deg) saturate(3) brightness(0.85) !important;
 }
-
 @keyframes shake {
   0% {
     transform: translate3d(0, 0, 0);
@@ -949,7 +922,6 @@ onMounted(() => {
     transform: translate3d(8px, -3px, 0);
   }
 }
-
 .anim-crit {
   animation: crit-shake 1s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   filter: drop-shadow(0 0 40px #ff0000) drop-shadow(0 0 25px rgba(255, 0, 0, 0.9)) sepia(1)
@@ -978,7 +950,6 @@ onMounted(() => {
     transform: translate3d(15px, -6px, 0) scale(1.2);
   }
 }
-
 .anim-exhausted {
   animation: exhaust 1s ease;
   filter: grayscale(50%) brightness(0.6) !important;
@@ -995,11 +966,9 @@ onMounted(() => {
     transform: rotateZ(5deg);
   }
 }
-
 .anim-death {
   animation: fade-death 1.2s ease-in forwards;
 }
-
 @keyframes fade-death {
   0% {
     filter: sepia(0) hue-rotate(0deg) saturate(1) brightness(1);
@@ -1016,7 +985,6 @@ onMounted(() => {
   }
 }
 
-/* --- PANEL INFERIOR --- */
 .bottom-panel-rpg {
   height: 160px;
   background: linear-gradient(180deg, rgba(45, 27, 78, 0.95) 0%, rgba(26, 13, 46, 0.98) 100%);
@@ -1028,7 +996,6 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-
   position: relative;
   z-index: 50;
 }
@@ -1153,76 +1120,59 @@ onMounted(() => {
     min-height: 100vh;
     max-width: 100%;
   }
-
   .top-hud {
     padding: 15px 25px;
     flex-direction: column;
     gap: 15px;
   }
-
   .world-info h2 {
     font-size: 1rem;
   }
-
   .active-hero-hud {
     padding: 12px 20px;
     width: 100%;
   }
-
   .active-hero-details {
     gap: 15px;
   }
-
   .hud-portrait {
     width: 60px;
     height: 60px;
   }
-
   .hud-stats h3 {
     font-size: 0.9rem;
   }
-
   .hud-health-bar {
     width: 150px;
     height: 16px;
   }
-
   .battlefield {
     padding: 15px 3%;
     gap: 15px;
   }
-
   .team-side {
     width: 50%;
     gap: 15px;
   }
-
   .sprite-wrapper {
-    min-width: 70px;
-    min-height: 100px;
+    height: 120px;
   }
-
   .battle-sprite {
     height: 120px;
   }
-
   .is-boss {
     height: 200px !important;
   }
-
   .bottom-panel-rpg {
     height: auto;
     padding: 15px;
   }
-
   .dramatic-text {
     font-size: 1.2rem;
   }
-
   .action-menu {
     gap: 12px;
   }
-
   .menu-btn {
     padding: 10px 20px;
     font-size: 0.85rem;
@@ -1233,151 +1183,122 @@ onMounted(() => {
   .battle-shell {
     padding: 5px;
   }
-
   .battle-container {
     border: 2px solid #7d33cc;
     height: 90vh;
     max-width: 100%;
   }
-
   .top-hud {
     padding: 12px 15px;
     border-bottom: 1px solid #7d33cc;
   }
-
   .world-info h2 {
     font-size: 0.9rem;
     letter-spacing: 1px;
   }
-
   .active-hero-hud {
     padding: 10px 15px;
     border-radius: 8px;
     border: 1px solid #d99fff;
   }
-
   .active-hero-details {
     flex-direction: column;
     gap: 10px;
     width: 100%;
   }
-
   .hud-portrait {
     width: 50px;
     height: 50px;
   }
-
   .hud-stats h3 {
     font-size: 0.8rem;
     margin-bottom: 4px;
   }
-
   .hud-health-bar {
     width: 100%;
     height: 14px;
     margin-bottom: 6px;
   }
-
   .hud-health-text {
     font-size: 0.6rem;
     line-height: 14px;
   }
-
   .hud-badges .badge {
     padding: 2px 8px;
     font-size: 0.7rem;
     margin-right: 4px;
   }
-
   .battlefield {
     padding: 10px 2%;
     flex-direction: column;
     justify-content: space-around;
   }
-
   .team-side {
     width: 100%;
     flex-direction: row;
     gap: 10px;
   }
-
   .sprite-container {
     flex-basis: calc(50% - 5px);
   }
-
   .floating-hud {
     padding: 4px 8px;
     margin-bottom: 6px;
     font-size: 0.75rem;
     min-width: 80px;
   }
-
   .sprite-name {
     font-size: 0.7rem;
     margin-bottom: 2px;
   }
-
   .mini-armor {
     font-size: 0.65rem;
     margin-bottom: 2px;
   }
-
   .hp-bar-mini {
     height: 6px;
   }
-
   .sprite-wrapper {
-    min-width: 50px;
-    min-height: 80px;
+    height: 100px;
   }
-
   .battle-sprite {
     height: 80px;
   }
-
   .is-boss {
     height: 150px !important;
   }
-
   .bottom-panel-rpg {
     height: auto;
     padding: 12px;
     border-top: 2px solid #d99fff;
   }
-
   .dramatic-text {
     font-size: 1rem;
     text-shadow:
       0 0 8px rgba(179, 102, 255, 0.4),
       1px 1px 0px rgba(0, 0, 0, 0.8);
   }
-
   .action-menu {
     gap: 8px;
     flex-wrap: wrap;
   }
-
   .menu-btn {
     padding: 8px 16px;
     font-size: 0.75rem;
     border: 2px solid #d99fff;
     border-radius: 6px;
   }
-
   .instruction-text {
     font-size: 0.9rem;
     margin-right: 10px;
   }
-
   .end-screen h1 {
     font-size: 2rem !important;
   }
-
   .end-screen p {
     font-size: 1rem;
     margin: 15px 0;
   }
-
   .btn-rpg {
     padding: 10px 25px;
     font-size: 0.9rem;
@@ -1389,141 +1310,111 @@ onMounted(() => {
   .battle-shell {
     padding: 0;
   }
-
   .battle-container {
     border: 1px solid #7d33cc;
     border-radius: 0;
     height: 100vh;
   }
-
   .top-hud {
     padding: 10px;
     gap: 8px;
     flex-direction: column;
   }
-
   .world-info h2 {
     font-size: 0.75rem;
     letter-spacing: 0px;
   }
-
   .active-hero-hud {
     padding: 8px 10px;
     border: 1px solid #d99fff;
     width: 100%;
   }
-
   .active-hero-details {
     gap: 8px;
   }
-
   .hud-portrait {
     width: 40px;
     height: 40px;
   }
-
   .hud-stats h3 {
     font-size: 0.7rem;
   }
-
   .hud-health-bar {
     width: 100%;
     height: 12px;
   }
-
   .hud-health-text {
     font-size: 0.55rem;
     line-height: 12px;
   }
-
   .hud-badges .badge {
     padding: 1px 6px;
     font-size: 0.6rem;
   }
-
   .battlefield {
     padding: 8px;
     gap: 8px;
   }
-
   .team-side {
     width: 100%;
     gap: 8px;
   }
-
   .sprite-container {
     flex-basis: calc(50% - 4px);
   }
-
   .floating-hud {
     padding: 3px 6px;
     margin-bottom: 4px;
     font-size: 0.65rem;
     min-width: 70px;
   }
-
   .sprite-name {
     font-size: 0.6rem;
   }
-
   .mini-armor {
     font-size: 0.55rem;
   }
-
   .hp-bar-mini {
     height: 5px;
   }
-
   .sprite-wrapper {
-    min-width: 40px;
-    min-height: 60px;
+    height: 80px;
   }
-
   .battle-sprite {
     height: 60px;
   }
-
   .is-boss {
     height: 120px !important;
   }
-
   .bottom-panel-rpg {
     height: auto;
     padding: 10px;
   }
-
   .dramatic-text {
     font-size: 0.8rem;
   }
-
   .action-menu {
     gap: 6px;
   }
-
   .menu-btn {
     padding: 6px 12px;
     font-size: 0.65rem;
     border: 1px solid #d99fff;
   }
-
   .instruction-text {
     font-size: 0.75rem;
     margin-right: 5px;
   }
-
   .end-screen {
     padding: 20px;
   }
-
   .end-screen h1 {
     font-size: 1.5rem !important;
   }
-
   .end-screen p {
     font-size: 0.85rem;
     margin: 10px 0;
   }
-
   .btn-rpg {
     padding: 8px 20px;
     font-size: 0.75rem;
@@ -1531,7 +1422,6 @@ onMounted(() => {
   }
 }
 
-/* Estilos para iconos */
 .end-icon {
   width: 40px;
   height: 40px;
@@ -1539,7 +1429,6 @@ onMounted(() => {
   flex-shrink: 0;
   filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
 }
-
 .hud-icon {
   width: 24px;
   height: 24px;
@@ -1547,14 +1436,12 @@ onMounted(() => {
   vertical-align: middle;
   filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.4));
 }
-
 .mini-icon {
   width: 16px;
   height: 16px;
   object-fit: contain;
   vertical-align: middle;
 }
-
 .menu-icon {
   width: 22px;
   height: 22px;
