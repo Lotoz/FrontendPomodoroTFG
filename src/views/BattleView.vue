@@ -813,8 +813,10 @@ onMounted(() => {
 }
 
 .is-boss {
-  height: 250px !important;
-  z-index: 2; /* Al ser absoluto crecerá hacia arriba invadiendo el campo libre */
+  z-index: 2;
+  /* Aura amenazante fija para que no rompa las animaciones de daño/ataque */
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 20px #ff0000)
+    drop-shadow(0 0 35px #ffd700);
 }
 /* ====================================================== */
 
@@ -1160,9 +1162,6 @@ onMounted(() => {
   .battle-sprite {
     height: 120px;
   }
-  .is-boss {
-    height: 200px !important;
-  }
   .bottom-panel-rpg {
     height: auto;
     padding: 15px;
@@ -1263,9 +1262,6 @@ onMounted(() => {
   }
   .battle-sprite {
     height: 80px;
-  }
-  .is-boss {
-    height: 150px !important;
   }
   .bottom-panel-rpg {
     height: auto;
@@ -1382,9 +1378,6 @@ onMounted(() => {
   }
   .battle-sprite {
     height: 60px;
-  }
-  .is-boss {
-    height: 120px !important;
   }
   .bottom-panel-rpg {
     height: auto;
