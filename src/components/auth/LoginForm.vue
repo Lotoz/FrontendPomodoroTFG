@@ -30,7 +30,7 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '../../stores/auth'
 import { useRouter } from 'vue-router'
 
 const emit = defineEmits(['cambiar-modo'])

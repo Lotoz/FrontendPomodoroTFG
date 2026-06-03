@@ -20,11 +20,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 
-// Importamos nuestros nuevos componentes hijos
-import LoginForm from '@/components/auth/LoginForm.vue'
-import RegisterForm from '@/components/auth/RegisterForm.vue'
-import ForgotForm from '@/components/auth/ForgotForm.vue'
-import ResetForm from '@/components/auth/ResetForm.vue'
+import LoginForm from '../components/auth/LoginForm.vue'
+import RegisterForm from '../components/auth/RegisterForm.vue'
+import ForgotForm from '../components/auth/ForgotForm.vue'
+import ResetForm from '../components/auth/ResetForm.vue'
 
 const authStore = useAuthStore()
 
