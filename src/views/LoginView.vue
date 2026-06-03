@@ -4,6 +4,7 @@
       <h2>{{ getTitle }}</h2>
 
       <form @submit.prevent="handleSubmit">
+        <!-- MODO: LOGIN -->
         <template v-if="currentMode === 'login'">
           <div class="form-group">
             <label>Nombre de Comandante</label>
@@ -15,15 +16,27 @@
           </div>
         </template>
 
+        <!-- MODO: REGISTRO -->
         <template v-else-if="currentMode === 'register'">
           <div class="form-group">
             <label>Nombre de Comandante</label>
             <input v-model="form.username" type="text" required />
           </div>
+
           <div class="form-group">
             <label>Email Cifrado</label>
             <input v-model="form.email" type="email" required />
           </div>
+          <div class="form-group">
+            <label>Confirmar Email Cifrado</label>
+            <input
+              v-model="form.confirmEmail"
+              type="email"
+              required
+              placeholder="Repite tu correo"
+            />
+          </div>
+
           <div class="form-group">
             <label>Elige a tu Maestro</label>
             <div class="master-grid">
@@ -61,12 +74,23 @@
               </div>
             </div>
           </div>
+
           <div class="form-group">
             <label>Contraseña Mágica</label>
             <input v-model="form.password" type="password" required />
           </div>
+          <div class="form-group">
+            <label>Confirmar Contraseña Mágica</label>
+            <input
+              v-model="form.confirmPassword"
+              type="password"
+              required
+              placeholder="Repite tu contraseña"
+            />
+          </div>
         </template>
 
+        <!-- MODO: OLVIDÉ CONTRASEÑA -->
         <template v-else-if="currentMode === 'forgot'">
           <p class="instruction-text">
             Introduce tu correo para recibir un pergamino de recuperación.
@@ -77,6 +101,7 @@
           </div>
         </template>
 
+        <!-- MODO: RESTABLECER CONTRASEÑA -->
         <template v-else-if="currentMode === 'reset'">
           <p class="instruction-text">Introduce el código de 6 dígitos enviado a tu correo.</p>
           <div class="form-group">
@@ -89,6 +114,7 @@
           </div>
         </template>
 
+        <!-- MENSAJE DE ERROR DEL STORE -->
         <div v-if="authStore.error" class="error-msg">
           {{ authStore.error }}
         </div>
@@ -134,7 +160,9 @@ const loading = ref(false)
 const form = reactive({
   username: '',
   email: '',
+  confirmEmail: '', // Nuevo campo
   password: '',
+  confirmPassword: '', // Nuevo campo
   code: '',
   masterName: 'lotoz',
 })
@@ -157,8 +185,10 @@ const getButtonText = computed(() => {
 const setMode = (mode) => {
   currentMode.value = mode
   authStore.error = null
-  // Limpiamos contraseñas y códigos por seguridad al cambiar de vista
+  // Limpiamos datos sensibles al cambiar de vista
   form.password = ''
+  form.confirmPassword = ''
+  form.confirmEmail = ''
   form.code = ''
 }
 
@@ -168,6 +198,20 @@ const handleSubmit = async () => {
 
   try {
     if (currentMode.value === 'register') {
+      // 1. Barreras de validación local
+      if (form.email !== form.confirmEmail) {
+        showAlert('Los correos cifrados no coinciden.', 'warning', 'Pergamino Inválido')
+        loading.value = false
+        return
+      }
+
+      if (form.password !== form.confirmPassword) {
+        showAlert('Las contraseñas mágicas no coinciden.', 'warning', 'Sello Roto')
+        loading.value = false
+        return
+      }
+
+      // 2. Si pasa las barreras, llama al servidor
       success = await authStore.register(form.username, form.email, form.password, form.masterName)
       if (success) router.push('/dashboard')
     } else if (currentMode.value === 'login') {
@@ -177,13 +221,13 @@ const handleSubmit = async () => {
       const res = await authStore.forgotPassword(form.email)
       if (res.success) {
         showAlert(res.message, 'success', 'Pergamino Enviado')
-        setMode('reset') // Pasamos directamente a la pantalla de poner el código
+        setMode('reset')
       }
     } else if (currentMode.value === 'reset') {
       const res = await authStore.resetPassword(form.email, form.code, form.password)
       if (res.success) {
         showAlert(res.message, 'success', 'Contraseña Restaurada')
-        setMode('login') // Devolvemos al usuario al login
+        setMode('login')
       }
     }
   } finally {
