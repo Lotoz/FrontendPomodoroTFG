@@ -110,6 +110,11 @@
         </div>
       </div>
     </div>
+    <button @click="mostrarTutorial = true" class="btn-help-floating" title="Ver Tutorial">
+      ?
+    </button>
+
+    <TutorialFortaleza :isOpen="mostrarTutorial" @close="mostrarTutorial = false" />
   </div>
 </template>
 
@@ -123,6 +128,7 @@ import { useAuthStore } from '../stores/auth'
 import ListaTareas from '../components/ListaTareas.vue'
 import PomodoroTimer from '../components/PomodoroTimer.vue'
 import EquipoHeroes from '../components/EquipoHeroes.vue'
+import TutorialFortaleza from '../components/TutorialFortaleza.vue'
 
 const router = useRouter()
 const { showAlert } = useDialog()
@@ -142,6 +148,14 @@ const isAdmin = ref(false)
 // Variables para el reproductor de música
 const musicaUrl = ref('')
 const musicaId = ref('')
+const mostrarTutorial = ref(false)
+
+const verificarTutorial = () => {
+  const completado = localStorage.getItem('fortaleza_tutorial_completado')
+  if (!completado) {
+    mostrarTutorial.value = true
+  }
+}
 
 const cargarDatos = async () => {
   try {
@@ -296,6 +310,7 @@ const logout = () => {
 onMounted(() => {
   cargarDatos()
   verificarAdmin()
+  verificarTutorial()
 })
 </script>
 
@@ -552,6 +567,48 @@ onMounted(() => {
   box-shadow:
     0 0 20px rgba(255, 215, 0, 0.4),
     0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-help-floating {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background: #ffd700;
+  color: #1a0d2e;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow:
+    0 4px 15px rgba(255, 215, 0, 0.5),
+    0 0 20px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-family: monospace; /* Para que el '?' se vea limpio */
+}
+
+.btn-help-floating:hover {
+  transform: scale(1.15) rotate(10deg);
+  background: #fff;
+  color: #000;
+  border-color: #ffd700;
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.8);
+}
+
+@media (max-width: 768px) {
+  .btn-help-floating {
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+  }
 }
 
 /* RESPONSIVIDAD */
