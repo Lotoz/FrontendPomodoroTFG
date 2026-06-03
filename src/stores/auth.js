@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://backendpomodorotfg.onre
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        token: localStorage.getItem('token') || null,
+        token: sessionStorage.getItem('token') || null,
         masterName: localStorage.getItem('masterName') || 'lotoz',
         error: null
     }),
@@ -22,8 +22,13 @@ export const useAuthStore = defineStore('auth', {
                 this.token = response.data.token;
                 this.masterName = response.data.masterName || 'lotoz';
 
-                localStorage.setItem('token', this.token);
+                // Guardamos el token en sessionStorage 
+                sessionStorage.setItem('token', this.token);
+
+                // Guardamos el nombre y maestro en localStorage
+                localStorage.setItem('username', username);
                 localStorage.setItem('masterName', this.masterName);
+
                 this.applyTheme(this.masterName);
 
                 return true;
@@ -40,8 +45,13 @@ export const useAuthStore = defineStore('auth', {
                 this.token = response.data.token;
                 this.masterName = response.data.masterName;
 
-                localStorage.setItem('token', this.token);
+                // Guardamos el token en sessionStorage
+                sessionStorage.setItem('token', this.token);
+
+                // Guardamos el nombre y maestro en localStorage
+                localStorage.setItem('username', username);
                 localStorage.setItem('masterName', this.masterName);
+
                 this.applyTheme(this.masterName);
 
                 return true;
@@ -50,8 +60,6 @@ export const useAuthStore = defineStore('auth', {
                 return false;
             }
         },
-
-        // Funciones para recuperación de contraseña
 
         async forgotPassword(email) {
             this.error = null;
@@ -82,8 +90,11 @@ export const useAuthStore = defineStore('auth', {
         logout() {
             this.token = null;
             this.masterName = 'lotoz';
-            localStorage.removeItem('token');
+            // Destruimos las llaves de seguridad y los datos locales
+            sessionStorage.removeItem('token');
+            localStorage.removeItem('username');
             localStorage.removeItem('masterName');
+
             this.applyTheme('lotoz');
         }
     }
