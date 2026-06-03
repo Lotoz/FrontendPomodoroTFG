@@ -122,7 +122,9 @@
                     'anim-crit': defensorActivo === heroe.id && textoCinematica.includes('CRÍTICO'),
                     'anim-exhausted':
                       textoCinematica.includes('exhausto') && textoCinematica.includes(heroe.name),
-                    'anim-death': muertosRecientes.includes(heroe.id) || heroe.currentLife <= 0,
+                    'anim-death':
+                      muertosRecientes.includes(heroe.id) ||
+                      (!modoCinematica && heroe.currentLife <= 0),
                   }"
                 />
               </div>
@@ -170,7 +172,9 @@
                       defensorActivo === bestia.id && textoCinematica.includes('CRÍTICO'),
                     'anim-exhausted':
                       textoCinematica.includes('exhausto') && textoCinematica.includes(bestia.name),
-                    'anim-death': muertosRecientes.includes(bestia.id) || bestia.currentLife <= 0,
+                    'anim-death':
+                      muertosRecientes.includes(bestia.id) ||
+                      (!modoCinematica && bestia.currentLife <= 0),
                     'is-boss': bestia.name.includes('[JEFE]'),
                   }"
                 />
@@ -1002,9 +1006,9 @@ onMounted(() => {
     filter: sepia(1) hue-rotate(-50deg) saturate(4) brightness(0.6);
   }
   100% {
-    filter: grayscale(100%) brightness(0);
-    opacity: 0;
-    transform: scale(0.4) translateY(30px) rotateZ(15deg);
+    filter: grayscale(100%) brightness(0.4);
+    opacity: 0.6;
+    transform: scale(0.8) translateY(20px) rotateZ(15deg);
   }
 }
 

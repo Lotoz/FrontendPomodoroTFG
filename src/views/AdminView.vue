@@ -17,7 +17,7 @@
             Consultando los archivos de la Fortaleza...
           </div>
 
-          <div v-else-if="!usuarios || usuarios.length === 0" class="status-message empty-message">
+          <div v-else-if="usuarios.length === 0" class="status-message empty-message">
             No hay usuarios a editar.
           </div>
 
