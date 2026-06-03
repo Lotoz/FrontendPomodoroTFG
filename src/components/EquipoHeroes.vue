@@ -194,13 +194,16 @@ const calcularPorcentajeVida = (vidaActual, vidaMax) => {
   display: flex;
   align-items: center;
   gap: 8px;
+  line-height: 1;
+  overflow: visible;
 }
 
 .hero-stats p img {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   object-fit: contain;
   flex-shrink: 0;
+  display: block;
 }
 
 /* Barra de Vida */
