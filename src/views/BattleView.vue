@@ -97,7 +97,7 @@
               <div class="floating-hud">
                 <span class="sprite-name">{{ heroe.name }}</span>
                 <span class="mini-armor"
-                  ><img src="/iconsApp/iconoEquipo.png" alt="ARM" class="mini-icon" />
+                  ><img src="/iconsApp/escudo.png" alt="ARM" class="mini-icon" />
                   {{ heroe.armor || 0 }}</span
                 >
                 <div class="hp-bar-mini">
@@ -148,7 +148,7 @@
               <div class="floating-hud">
                 <span class="sprite-name">{{ bestia.name }}</span>
                 <span class="mini-armor"
-                  ><img src="/iconsApp/iconoEquipo.png" alt="ARM" class="mini-icon" />
+                  ><img src="/iconsApp/escudo.png" alt="ARM" class="mini-icon" />
                   {{ bestia.armor || 0 }}</span
                 >
                 <div class="hp-bar-mini">

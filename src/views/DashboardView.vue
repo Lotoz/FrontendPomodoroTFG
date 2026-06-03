@@ -9,7 +9,9 @@
           </h2>
           <div class="nav-buttons">
             <button @click="router.push('/dashboard')" class="btn-nav active">Tablón</button>
-            <button @click="router.push('/tareas')" class="btn-nav">Misiones</button>
+            <button @click="router.push('/tareas')" class="btn-nav">
+              <img src="/iconsApp/star.png" alt="Taberna" /> Misiones
+            </button>
             <button @click="router.push('/heroes')" class="btn-nav">
               <img src="/iconsApp/beer.png" alt="Taberna" /> Taberna
             </button>
@@ -116,7 +118,7 @@ import { ref, onMounted } from 'vue'
 import api from '../api/axios'
 import { useRouter } from 'vue-router'
 import { useDialog } from '../composables/useDialog'
-import { useAuthStore } from '../stores/auth' // <-- 1. Importamos la tienda de autenticación
+import { useAuthStore } from '../stores/auth'
 
 import ListaTareas from '../components/ListaTareas.vue'
 import PomodoroTimer from '../components/PomodoroTimer.vue'
@@ -124,7 +126,7 @@ import EquipoHeroes from '../components/EquipoHeroes.vue'
 
 const router = useRouter()
 const { showAlert } = useDialog()
-const authStore = useAuthStore() // <-- 2. Inicializamos la tienda
+const authStore = useAuthStore()
 
 const tareas = ref([])
 const equipo = ref([])
@@ -167,12 +169,9 @@ const cargarDatos = async () => {
 //Verificar si el usuario es admin para mostrar el botón de Sala de Mando
 const verificarAdmin = async () => {
   try {
-    // Hacemos un "toque" a la puerta de la sala de mando
     await api.get('/admin/users')
-    // Si Java nos deja pasar, mostramos el botón
     isAdmin.value = true
   } catch (error) {
-    // Si Java nos bloquea (403), lo mantenemos oculto
     isAdmin.value = false
   }
 }

@@ -3,7 +3,10 @@
     <div class="tavern-container">
       <header class="header-top">
         <div class="title-section">
-          <h1><img src="/iconsApp/beer.png" alt="Taberna" class="h1-icon" /> Taberna del Cuervo Sediento</h1>
+          <h1>
+            <img src="/iconsApp/beer.png" alt="Taberna" class="h1-icon" /> Taberna del Cuervo
+            Sediento
+          </h1>
           <p class="subtitle">Recluta mercenarios para tu causa o despide a los más débiles.</p>
         </div>
         <button @click="router.push('/dashboard')" class="btn-back">Volver a la Fortaleza</button>
@@ -29,20 +32,27 @@
               </div>
               <div class="card-stats">
                 <p>
-                  <img src="/iconsApp/star.png" alt="Vida" class="stat-icon" /> Vida Base: <strong>{{ oferta.life }}</strong>
+                  <img src="/iconsApp/star.png" alt="Vida" class="stat-icon" /> Vida Base:
+                  <strong>{{ oferta.life }}</strong>
                 </p>
                 <p>
-                  <img src="/iconsApp/iconoEquipo.png" alt="Armadura" class="stat-icon" /> Armadura: <strong>{{ oferta.armor }}</strong>
+                  <img src="/iconsApp/escudo.png" alt="Armadura" class="stat-icon" /> Armadura:
+                  <strong>{{ oferta.armor }}</strong>
                 </p>
               </div>
-              <button @click="reclutarHeroe(oferta.name)" class="btn-recruit"><img src="/iconsApp/coin.png" alt="Reclutar" class="btn-icon" /> Reclutar</button>
+              <button @click="reclutarHeroe(oferta.name)" class="btn-recruit">
+                <img src="/iconsApp/coin.png" alt="Reclutar" class="btn-icon" /> Reclutar
+              </button>
             </div>
           </div>
         </section>
 
         <section class="camp-section">
           <div class="camp-header">
-            <h2><img src="/iconsApp/camp.png" alt="Campamento" class="h2-icon" /> Tu Campamento (Todos)</h2>
+            <h2>
+              <img src="/iconsApp/camp.png" alt="Campamento" class="h2-icon" /> Tu Campamento
+              (Todos)
+            </h2>
             <span class="badge-count">{{ equipo.length }} Héroes</span>
           </div>
           <p class="section-desc">
@@ -87,11 +97,11 @@ const cargando = ref(true)
 
 const obtenerIcono = (clase) => {
   const rutas = {
-    Warrior: '/iconsApp/iconoEquipo.png',
-    Dwarf: '/iconsApp/iconoEquipo.png',
-    Elf: '/iconsApp/iconoEquipo.png',
-    Cleric: '/iconsApp/iconoEquipo.png',
-    Wizard: '/iconsApp/iconoEquipo.png',
+    Warrior: '/iconsApp/warrior.png',
+    Dwarf: '/iconsApp/dwarf.png',
+    Elf: '/iconsApp/elf.png',
+    Cleric: '/iconsApp/cleric.png',
+    Wizard: '/iconsApp/wizard.png',
   }
   return rutas[clase] || '/iconsApp/iconoEquipo.png'
 }
@@ -195,14 +205,16 @@ onMounted(() => {
   align-items: center;
   gap: 10px;
 }
-.h1-icon, .h2-icon {
+.h1-icon,
+.h2-icon {
   width: 28px;
   height: 28px;
   object-fit: contain;
   flex-shrink: 0;
   vertical-align: middle;
 }
-.stat-icon, .btn-icon {
+.stat-icon,
+.btn-icon {
   width: 16px;
   height: 16px;
   object-fit: contain;

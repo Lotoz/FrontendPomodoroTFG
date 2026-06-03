@@ -18,7 +18,7 @@
 
         <div class="hero-stats">
           <p>
-            <img src="/iconsApp/iconoEquipo.png" alt="Armadura" /> Armadura:
+            <img src="/iconsApp/escudo.png" alt="Armadura" /> Armadura:
             <strong>{{ heroe.armor }}</strong>
           </p>
 

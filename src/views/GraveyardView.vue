@@ -98,11 +98,11 @@ const cerrarModal = () => {
 
 const obtenerIconoClase = (clase) => {
   const iconos = {
-    Warrior: '/iconsApp/iconoEquipo.png',
-    Dwarf: '/iconsApp/iconoEquipo.png',
-    Elf: '/iconsApp/iconoEquipo.png',
-    Cleric: '/iconsApp/iconoEquipo.png',
-    Wizard: '/iconsApp/iconoEquipo.png',
+    Warrior: '/iconsApp/warrior.png',
+    Dwarf: '/iconsApp/dwarf.png',
+    Elf: '/iconsApp/elf.png',
+    Cleric: '/iconsApp/cleric.png',
+    Wizard: '/iconsApp/wizard.png',
   }
   return iconos[clase] || '/iconsApp/iconoEquipo.png'
 }
