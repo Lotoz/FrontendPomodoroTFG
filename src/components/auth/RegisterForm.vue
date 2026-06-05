@@ -86,6 +86,7 @@
 import { reactive, ref } from 'vue'
 import { useAuthStore } from '../../stores/auth'
 import { useDialog } from '../../composables/useDialog'
+import { useRouter } from 'vue-router'
 
 const emit = defineEmits(['cambiar-modo'])
 const authStore = useAuthStore()
