@@ -23,7 +23,8 @@ const guardarEstadoEnLocal = () => {
     fase: fase.value,
     cicloActual: cicloActual.value,
     tiempoRestante: Math.max(0, tiempoRestante.value), // Nunca guardar negativos
-    timestampGuarde: Date.now(), // Guardamos la hora exacta
+    timestampGuarde: Date.now(),
+    timerActivo: timerActivo.value,
   }
   localStorage.setItem('pomodoroState', JSON.stringify(estado))
 }
@@ -37,20 +38,23 @@ const cargarEstadoDesdeLocal = () => {
       fase.value = estado.fase
       cicloActual.value = estado.cicloActual
 
-      // Calculamos cuánto tiempo ha pasado desde que se cerró/recargó la pestaña
-      const tiempoTranscurridoSegundos = Math.floor((Date.now() - estado.timestampGuarde) / 1000)
+      if (estado.timerActivo) {
+        // El timer estaba activo mientras estabas en la batalla o fuera de la app
+        const tiempoTranscurridoSegundos = Math.floor((Date.now() - estado.timestampGuarde) / 1000)
+        const nuevoTiempo = estado.tiempoRestante - tiempoTranscurridoSegundos
 
-      // Si el timer estaba activo ANTES de recargar (podemos deducirlo porque guardamos el estado constantemente si está activo)
-      // restamos ese tiempo perdido. Si no, restauramos tal cual.
-      // OJO: Por simplicidad, si recarga, lo dejamos en pausa pero con el tiempo correcto que tenía al recargar.
-      const nuevoTiempo = estado.tiempoRestante - tiempoTranscurridoSegundos
-
-      if (nuevoTiempo > 0) {
-        tiempoRestante.value = nuevoTiempo
+        if (nuevoTiempo > 0) {
+          tiempoRestante.value = nuevoTiempo
+          timerActivo.value = false
+          guardarEstadoEnLocal()
+        } else {
+          // El tiempo se acabó mientras estabas fuera
+          tiempoRestante.value = 0
+          finalizarPomodoro()
+        }
       } else {
-        // Si el tiempo que pasó es mayor al que quedaba, el pomodoro ya terminó mientras estaba cerrado
-        tiempoRestante.value = 0
-        finalizarPomodoro() // Ejecutamos la lógica de fin de ciclo
+        tiempoRestante.value = estado.tiempoRestante
+        timerActivo.value = false
       }
     } catch (e) {
       console.error('Error leyendo localStorage del Pomodoro', e)
@@ -62,8 +66,6 @@ const cargarEstadoDesdeLocal = () => {
 const limpiarLocal = () => {
   localStorage.removeItem('pomodoroState')
 }
-
-// ----------------------------------------------
 
 watch(
   () => props.workDurationMinutes,
@@ -176,9 +178,12 @@ onMounted(() => {
   cargarEstadoDesdeLocal()
 })
 
-// Por seguridad, limpiamos el intervalo si el componente muere (cambio de ruta)
+// Por seguridad, limpiamos el intervalo si el componente muere
 onUnmounted(() => {
   if (intervalo) clearInterval(intervalo)
+  if (timerActivo.value) {
+    guardarEstadoEnLocal()
+  }
 })
 </script>
 
