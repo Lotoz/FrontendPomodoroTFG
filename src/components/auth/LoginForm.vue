@@ -83,7 +83,6 @@ const handleSubmit = async () => {
   margin-bottom: 0.5rem;
   font-weight: bold;
 }
-
 .input-wrapper {
   position: relative;
   display: flex;
@@ -105,7 +104,7 @@ const handleSubmit = async () => {
   outline: none;
   border-color: var(--primary);
 }
-/* Estilos del botón del ojo */
+
 .btn-eye {
   position: absolute;
   right: 10px;
@@ -114,14 +113,17 @@ const handleSubmit = async () => {
   padding: 0;
   cursor: pointer;
   color: var(--text-main);
-  opacity: 0.5;
-  transition: opacity 0.2s;
+  opacity: 0.8;
+  filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.6));
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .btn-eye:hover {
   opacity: 1;
+  color: var(--primary);
+  transform: scale(1.1);
 }
 .btn-eye svg {
   width: 22px;
