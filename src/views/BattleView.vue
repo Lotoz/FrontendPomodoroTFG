@@ -1,5 +1,9 @@
 <template>
   <div class="battle-shell">
+    <audio ref="battleAudio" loop>
+      <source src="/music/battleMusic.mp3" type="audio/mpeg" />
+    </audio>
+
     <div
       class="battle-container"
       :style="{ backgroundImage: `url(${obtenerFondoMundo(zonaActual)})` }"
@@ -242,13 +246,16 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue' // Añadido onUnmounted
 import api from '../api/axios'
 import { useRouter } from 'vue-router'
 import { useDialog } from '../composables/useDialog'
 
 const router = useRouter()
 const { showAlert, showConfirm } = useDialog()
+
+// Referencia para la música de batalla
+const battleAudio = ref(null)
 
 // Estado Global
 const heroes = ref([])
@@ -490,6 +497,22 @@ const actualizarPantalla = (data) => {
 
 onMounted(() => {
   cargarEstado()
+
+  // Reproducir música al cargar el componente
+  if (battleAudio.value) {
+    battleAudio.value.volume = 0.5 // Volumen equilibrado
+    battleAudio.value.play().catch((error) => {
+      console.warn('El navegador bloqueó la reproducción automática de la música.', error)
+    })
+  }
+})
+
+// Detener la música si el jugador abandona la batalla
+onUnmounted(() => {
+  if (battleAudio.value) {
+    battleAudio.value.pause()
+    battleAudio.value.currentTime = 0 // Reiniciar pista para la próxima vez
+  }
 })
 </script>
 

@@ -10,11 +10,22 @@ import BattleView from '../views/BattleView.vue'
 import GraveyardView from '../views/GraveyardView.vue'
 import CampView from '../views/CampView.vue'
 import AdminView from '../views/AdminView.vue'
+import LandingView from '../views/LandingView.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', name: 'login', component: LoginView, meta: { requiresAuth: false } },
+    {
+      path: '/',
+      name: 'landing',
+      component: LandingView
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView
+    },
     { path: '/dashboard', name: 'dashboard', component: DashboardView, meta: { requiresAuth: true } },
     { path: '/tareas', name: 'tareas', component: MisionesView, meta: { requiresAuth: true } },
     { path: '/perfil', name: 'perfil', component: ProfileView, meta: { requiresAuth: true } },
