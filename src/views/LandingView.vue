@@ -259,7 +259,6 @@ import { ref } from 'vue'
 const router = useRouter()
 const logoHover = ref(false)
 
-// Lógica de música
 const audioRef = ref(null)
 const isPlaying = ref(false)
 
@@ -275,7 +274,6 @@ const toggleMusic = () => {
   }
 }
 
-// Navegación
 const irAlLogin = () => {
   router.push('/login')
 }
@@ -286,7 +284,6 @@ const scrollToTop = () => {
 </script>
 
 <style scoped>
-/* Fondo general más oscuro */
 .landing-shell {
   min-height: 100vh;
   background: linear-gradient(135deg, #05020d 0%, #0a0418 50%, #110522 100%);
@@ -298,9 +295,6 @@ const scrollToTop = () => {
   align-items: center;
 }
 
-/* =========================================
-   CONTENEDOR DE EFECTOS (SOLUCIONA EL BUG DE SCROLL)
-   ========================================= */
 .background-effects {
   position: fixed;
   top: 0;
@@ -312,9 +306,6 @@ const scrollToTop = () => {
   z-index: 0;
 }
 
-/* =========================================
-   BOTÓN DE MÚSICA FLOTANTE
-   ========================================= */
 .music-toggle-btn {
   position: fixed;
   bottom: 40px;
@@ -366,7 +357,7 @@ const scrollToTop = () => {
 }
 
 /* =========================================
-   LLUVIA DE ESTRELLAS HACIA LA DERECHA
+   LLUVIA DE ESTRELLAS REALISTA
    ========================================= */
 .star-fall {
   position: absolute;
@@ -386,7 +377,8 @@ const scrollToTop = () => {
     0 0 10px #fff,
     0 0 20px #d99fff,
     0 0 40px #d99fff;
-  transform: rotate(-45deg);
+  /* Rotación a 45 grados positivos para alinearla con la caída hacia abajo y a la derecha */
+  transform: rotate(45deg);
   animation: fall linear infinite;
 }
 
@@ -394,11 +386,17 @@ const scrollToTop = () => {
   content: '';
   position: absolute;
   top: 50%;
-  right: 0;
+  /* Desplazamos la estela sutilmente hacia atrás para que nazca del centro del brillo */
+  right: 2px;
   transform: translateY(-50%);
-  width: 150px;
+  width: 180px;
   height: 2px;
-  background: linear-gradient(to left, #fff 0%, #d99fff 40%, transparent 100%);
+  background: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(217, 159, 255, 0.8) 20%,
+    transparent 100%
+  );
 }
 
 .star:nth-child(1) {
@@ -494,16 +492,21 @@ const scrollToTop = () => {
 
 @keyframes fall {
   0% {
-    transform: translate3d(0, 0, 0) rotate(-45deg);
+    transform: translate3d(0, 0, 0) rotate(45deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  80% {
     opacity: 1;
   }
   100% {
-    transform: translate3d(1800px, 1800px, 0) rotate(-45deg);
+    transform: translate3d(1800px, 1800px, 0) rotate(45deg);
     opacity: 0;
   }
 }
 
-/* Partículas */
 .magic-particles {
   position: absolute;
   top: 0;
@@ -576,7 +579,6 @@ const scrollToTop = () => {
   }
 }
 
-/* Orbes y Círculos Mágicos */
 .orb {
   position: absolute;
   border-radius: 50%;
@@ -667,9 +669,6 @@ const scrollToTop = () => {
   }
 }
 
-/* =========================================
-   CONTENEDOR PRINCIPAL
-   ========================================= */
 .landing-container {
   max-width: 1200px;
   width: 100%;
@@ -678,10 +677,9 @@ const scrollToTop = () => {
   z-index: 10;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Esto empuja el footer hacia abajo */
+  flex-grow: 1;
 }
 
-/* Navegación */
 .top-nav {
   display: flex;
   justify-content: space-between;
@@ -761,7 +759,6 @@ const scrollToTop = () => {
   transform: translateY(-2px);
 }
 
-/* Hero Section */
 .hero-section {
   text-align: center;
   padding: 60px 0 80px;
@@ -945,7 +942,6 @@ const scrollToTop = () => {
   object-fit: contain;
 }
 
-/* Features */
 .features-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1155,9 +1151,6 @@ const scrollToTop = () => {
   border-color: rgba(255, 215, 0, 0.6);
 }
 
-/* =========================================
-   NUEVA SECCIÓN: GALERÍA DE MAZMORRA
-   ========================================= */
 .gallery-section {
   padding: 40px 0 80px;
   text-align: center;
@@ -1255,9 +1248,6 @@ const scrollToTop = () => {
   transform: translateY(0);
 }
 
-/* =========================================
-   GAMEPLAY SECTION
-   ========================================= */
 .gameplay-section {
   padding: 60px 0 80px;
   text-align: center;
